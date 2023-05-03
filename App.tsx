@@ -11,12 +11,15 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 function App(): JSX.Element {
   return (
-    <SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView>
         <Text>Hello Wrold</Text>
     </SafeAreaView>
+    </NavigationContainer>
   );
 }
 

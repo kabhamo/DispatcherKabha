@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "726305494360",
+    "project_id": "dispatcher-kabha",
+    "storage_bucket": "dispatcher-kabha.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726305494360:android:f1b9b993ae8968e3d2c12d",
+        "android_client_info": {
+          "package_name": "com.dispatcherkabha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726305494360-t3m14itcscbsom65mtce1o4e7dc1m21h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByoHBNLUEk4idcmNLsG6UuvaCvZV15G7w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726305494360-t3m14itcscbsom65mtce1o4e7dc1m21h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

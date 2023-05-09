@@ -18,16 +18,23 @@ import HomeScreen from './src/screens/HomeScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import { colors } from './src/util/colors';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Login: undefined;
+  Signup: undefined;
+  Home: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login" screenOptions={{ contentStyle: { backgroundColor: colors.white } }}>
+        initialRouteName="Login"
+        screenOptions={{ contentStyle: { backgroundColor: colors.white } }}>
         <Stack.Screen name="Login" options={{ headerShown: false, }} component={LoginScreen} />
         <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,19 +1,32 @@
 import { View, Text, Image, StyleSheet, TextInput, Platform, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
-//import DispatcherInputText from '../components/DispatcherInputText'
 import DispatcherButton from '../components/DispatcherButton'
 import { Dimensions } from 'react-native'
 import { colors } from '../util/colors'
 import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native'
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Login: undefined;
+  Signup: undefined;
+  Home: undefined;
+};
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const { height, width } = Dimensions.get('screen')
 type Props = {}
 
 const LoginScreen = (props: Props) => {
-  const [visibility, setVisibility] = useState<boolean>(true)
+  const [visibility, setVisibility] = useState<boolean>(true);
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const onPresshandler = () => {
     console.log("Handler start")
+  }
+  const signupHandler = () => {
+    navigation.navigate('Signup');
   }
 
   return (
@@ -32,7 +45,7 @@ const LoginScreen = (props: Props) => {
           style={styles.inputText}
           autoCapitalize="none"
           placeholderTextColor="#5A5A89"
-          placeholder='Email'
+          placeholder='Your email'
         />
         <View style={styles.passwordContainer}>
           <TextInput
@@ -48,7 +61,6 @@ const LoginScreen = (props: Props) => {
               : <Icon name="eye-off" color={colors.primaryBlackTwo} size={25} />}
           </TouchableOpacity>
         </View>
-
       </View>
 
       <View style={styles.line}></View>
@@ -61,7 +73,7 @@ const LoginScreen = (props: Props) => {
         <DispatcherButton
           type='signup'
           title="SIGNUP"
-          onPress={onPresshandler} />
+          onPress={signupHandler} />
       </View>
     </View>
   )

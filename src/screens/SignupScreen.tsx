@@ -1,7 +1,9 @@
-import { View, Text, Image, StyleSheet, TextInput, Platform, TouchableOpacity } from 'react-native'
+import {
+  View, Text, Image, StyleSheet,
+  TextInput, Platform, TouchableOpacity, Dimensions
+} from 'react-native'
 import React, { useState } from 'react'
 import DispatcherButton from '../components/DispatcherButton'
-import { Dimensions } from 'react-native'
 import { colors } from '../util/colors'
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native'
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   },
   topImage: {
     width: width,
-    height: height * 0.4,
+    height: height * 0.3,
   },
   inputText: {
     alignSelf: 'center',

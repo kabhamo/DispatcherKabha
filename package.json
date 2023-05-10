@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "source ~/.bash_profile&&react-native run-android",
-    "ios": "react-native run-ios",
-    "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest",
-    "postinstall": "npx typesync"
+    "reset": "npx react-native start --reset-cache",
+    "ios": "react-native run-ios",
+    "android": "source ~/.bash_profile&&react-native run-android",
+    "postinstall": "npx typesync",
+    "lint": "eslint .",
+    "test": "jest"
   },
   "dependencies": {
     "@react-native-firebase/analytics": "^17.4.3",

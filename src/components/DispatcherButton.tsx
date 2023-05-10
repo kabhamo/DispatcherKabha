@@ -16,28 +16,28 @@ const DispatcherButton = (props: Props) => {
         color: props.type === 'login' ? colors.white : colors.primaryBlackTwo
     }
     return (
-        <View style={styles.container}>
-            <TouchableOpacity
-                style={[styles.btn, backgroundColorStyleType]}
-                onPress={props.onPress}>
-                <Text style={[styles.text, textColorStyleType]}>{props.title}</Text>
-            </TouchableOpacity>
-        </View>
+        //<View style={styles.container}>
+        <TouchableOpacity
+            style={[styles.btn, backgroundColorStyleType]}
+            onPress={props.onPress}>
+            <Text style={[styles.text, textColorStyleType]}>{props.title}</Text>
+        </TouchableOpacity>
+        //</View>
     )
 }
 
 export default DispatcherButton
 
 const styles = StyleSheet.create({
-    container: {
-        alignItems: "center",
-        //margin: 10,
-    },
+    //container: {
+    //    alignItems: "center",
+    //    margin: 10,
+    //},
     btn: {
         width: '88%',
         textAlign: 'center',
         padding: 12,
-        marginBottom: 15,
+        //marginBottom: 15,
         alignItems: 'center',
         borderRadius: 10,
         backgroundColor: colors.primaryBlue

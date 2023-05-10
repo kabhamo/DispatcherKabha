@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   topImage: {
     width: width,
-    height: height * 0.4,
+    height: height * 0.3,
   },
   inputText: {
     alignSelf: 'center',

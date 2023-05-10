@@ -30,7 +30,7 @@ function App(): JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{ contentStyle: { backgroundColor: colors.white } }}>
         <Stack.Screen name="Login" options={{ headerShown: false, }} component={LoginScreen} />
         <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreen} />

@@ -3,26 +3,14 @@ import React, { useState } from 'react'
 import DispatcherButton from '../components/DispatcherButton'
 import { Dimensions } from 'react-native'
 import { colors } from '../util/colors'
-import { RouteProp, useNavigation } from '@react-navigation/native'
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PasswordComponent } from '../components/PasswordComponent'
-
-type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-  Home: undefined;
-};
-
-type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+import { AuthNavProps } from '../routes/paramsList/AuthParamList'
 
 const { height, width } = Dimensions.get('screen')
-type Props = {
-  route: RouteProp<RootStackParamList, 'Login'>
-}
+type Props = {}
 
-const LoginScreen = (props: Props) => {
+const LoginScreen = ({ navigation, route }: AuthNavProps<'Login'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
-  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const onPresshandler = () => {
     console.log("Handler start")
@@ -62,7 +50,7 @@ const LoginScreen = (props: Props) => {
           title="LOGIN"
           backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
           textColorStyleType={{ color: colors.white }}
-          onPress={() => console.log("login")} />
+          onPress={() => console.log(route.name)} />
         <DispatcherButton
           type='signup'
           title="SIGNUP"

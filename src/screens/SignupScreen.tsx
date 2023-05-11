@@ -1,5 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
   Dimensions,
@@ -12,22 +10,13 @@ import {
 import DispatcherButton from '../components/DispatcherButton';
 import { colors } from '../util/colors';
 import { PasswordComponent } from '../components/PasswordComponent';
+import { AuthNavProps } from '../routes/paramsList/AuthParamList';
 
-type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-  Home: undefined;
-};
-
-type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Signup'>;
-
-
-type Props = {}
+type SignupScreenProps = {}
 const { height, width } = Dimensions.get('screen')
 
-const SignupScreen = (props: Props) => {
+const SignupScreen = ({ navigation, route }: AuthNavProps<'Signup'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
-  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const loginHandler = () => {
     navigation.navigate('Login');

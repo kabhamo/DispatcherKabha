@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -11,16 +11,35 @@ import DispatcherButton from '../components/DispatcherButton';
 import { colors } from '../util/colors';
 import { PasswordComponent } from '../components/PasswordComponent';
 import { AuthNavProps } from '../routes/paramsList/AuthParamList';
+import { PasswordEnum } from '../util/enums';
+import { firebaseSignin } from '../services/firebaseAuth';
 
-type SignupScreenProps = {}
+
 const { height, width } = Dimensions.get('screen')
 
-const SignupScreen = ({ navigation, route }: AuthNavProps<'Signup'>) => {
+const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: AuthNavProps<'Signup'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [rePassword, setRePassword] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const loginHandler = () => {
-    navigation.navigate('Login');
+  const signinHandler = async () => {
+    try {
+      if (email && rePassword && password === rePassword) {
+        //? save to redux
+        const userCredential = await firebaseSignin(email, password)
+        console.log("userCredential: ", userCredential)
+      } else {
+        //!Error state
+        console.log("check email and passwords")
+      }
+    } catch (ex) {
+      //!Error state
+      console.log(`Error while signing in ${ex}`)
+    }
   }
+
 
   return (
     <View style={styles.container}>
@@ -41,10 +60,25 @@ const SignupScreen = ({ navigation, route }: AuthNavProps<'Signup'>) => {
           autoCapitalize="none"
           placeholderTextColor="#5A5A89"
           placeholder='Your email'
+          onChangeText={(input) => setEmail(input)}
         />
 
-        <PasswordComponent placeholder='Password' visibility={visibility} setVisibility={setVisibility} />
-        <PasswordComponent placeholder='Re-Enter Password' visibility={visibility} setVisibility={setVisibility} />
+        <PasswordComponent
+          placeholder='Password'
+          type={PasswordEnum.Password}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          setPassword={setPassword}
+          setRePassword={() => ""}
+        />
+        <PasswordComponent
+          placeholder='Re-Enter Password'
+          type={PasswordEnum.ReinterPassword}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          setPassword={() => ""}
+          setRePassword={setRePassword}
+        />
 
         <View style={styles.line}></View>
       </View>
@@ -55,13 +89,13 @@ const SignupScreen = ({ navigation, route }: AuthNavProps<'Signup'>) => {
           title="SIGNUP"
           backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
           textColorStyleType={{ color: colors.white }}
-          onPress={() => console.log("signup")} />
+          onPress={() => signinHandler()} />
         <DispatcherButton
           type='login'
           title="LOGIN"
           backgroundColorStyleType={{ backgroundColor: colors.gray }}
           textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => loginHandler()} />
+          onPress={() => navigation.navigate('Login')} />
       </View>
 
     </View>

@@ -5,19 +5,32 @@ import { Dimensions } from 'react-native'
 import { colors } from '../util/colors'
 import { PasswordComponent } from '../components/PasswordComponent'
 import { AuthNavProps } from '../routes/paramsList/AuthParamList'
+import { PasswordEnum } from '../util/enums'
+import { firebaseLogin } from '../services/firebaseAuth'
 
 const { height, width } = Dimensions.get('screen')
-type Props = {}
 
-const LoginScreen = ({ navigation, route }: AuthNavProps<'Login'>) => {
+const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: AuthNavProps<'Login'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const onPresshandler = () => {
-    console.log("Handler start")
+  const loginHandler = async () => {
+    try {
+      if (email && password) {
+        const userCredential = await firebaseLogin(email, password);
+        console.log("Login userCredential: ", userCredential)
+      } else {
+        //!Error state
+        console.log("check email and password")
+      }
+    } catch (ex) {
+      //!Error state
+      console.log(`Error while signing in ${ex}`)
+    }
   }
-  const signupHandler = () => {
-    navigation.navigate('Signup');
-  }
+
 
   return (
     <View style={styles.container}>
@@ -38,8 +51,16 @@ const LoginScreen = ({ navigation, route }: AuthNavProps<'Login'>) => {
           autoCapitalize="none"
           placeholderTextColor="#5A5A89"
           placeholder='Your email'
+          onChangeText={(input) => setEmail(input)}
         />
-        <PasswordComponent placeholder='Password' visibility={visibility} setVisibility={setVisibility} />
+        <PasswordComponent
+          placeholder='Password'
+          type={PasswordEnum.Password}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          setPassword={setPassword}
+          setRePassword={() => ""}
+        />
 
         <View style={styles.line}></View>
       </View>
@@ -50,13 +71,13 @@ const LoginScreen = ({ navigation, route }: AuthNavProps<'Login'>) => {
           title="LOGIN"
           backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
           textColorStyleType={{ color: colors.white }}
-          onPress={() => console.log(route.name)} />
+          onPress={() => loginHandler()} />
         <DispatcherButton
           type='signup'
           title="SIGNUP"
           backgroundColorStyleType={{ backgroundColor: colors.gray }}
           textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => signupHandler()} />
+          onPress={() => navigation.navigate('Signup')} />
       </View>
 
     </View>

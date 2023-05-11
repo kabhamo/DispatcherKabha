@@ -2,13 +2,30 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import React from 'react'
 import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../util/colors'
+import { PasswordEnum } from '../util/enums';
 
 type Props = {
     placeholder: string,
+    type: string
     visibility: boolean,
-    setVisibility: React.Dispatch<React.SetStateAction<boolean>>
+    setVisibility: React.Dispatch<React.SetStateAction<boolean>>,
+    setPassword: React.Dispatch<React.SetStateAction<string | null>>,
+    setRePassword: React.Dispatch<React.SetStateAction<string | null>>
 }
-export const PasswordComponent: React.FC<Props> = ({ placeholder, visibility, setVisibility }) => {
+export const PasswordComponent: React.FC<Props> = ({ placeholder, type, visibility, setVisibility, setPassword, setRePassword }) => {
+
+    const handlePasswordInput = (input: string) => {
+        switch (type) {
+            case PasswordEnum.Password:
+                setPassword(input);
+                break;
+            case PasswordEnum.ReinterPassword:
+                setRePassword(input)
+                break;
+            default:
+                break;
+        }
+    }
     return (
         <View style={styles.passwordContainer}>
             <TextInput
@@ -17,6 +34,7 @@ export const PasswordComponent: React.FC<Props> = ({ placeholder, visibility, se
                 placeholderTextColor="#5A5A89"
                 placeholder={placeholder}
                 secureTextEntry={!visibility}
+                onChangeText={(input) => handlePasswordInput(input)}
             />
             <TouchableOpacity
                 onPress={() => setVisibility(!visibility)}>

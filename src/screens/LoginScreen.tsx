@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import DispatcherButton from '../components/DispatcherButton'
 import { Dimensions } from 'react-native'
 import { colors } from '../util/colors'
-import { useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PasswordComponent } from '../components/PasswordComponent'
 
@@ -16,7 +16,9 @@ type RootStackParamList = {
 type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const { height, width } = Dimensions.get('screen')
-type Props = {}
+type Props = {
+  route: RouteProp<RootStackParamList, 'Login'>
+}
 
 const LoginScreen = (props: Props) => {
   const [visibility, setVisibility] = useState<boolean>(true);

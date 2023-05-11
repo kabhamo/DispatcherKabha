@@ -1,5 +1,6 @@
 
 export type AppParamList = {
     Home: undefined;
-    Settings: undefined;
+    Profile: undefined;
+    Favorite: undefined;
 }

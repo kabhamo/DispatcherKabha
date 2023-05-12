@@ -1,34 +1,35 @@
-import { View, Text, Image, StyleSheet, TextInput, Platform } from 'react-native'
-import React, { useState } from 'react'
-import DispatcherButton from '../components/DispatcherButton'
-import { Dimensions } from 'react-native'
-import { colors } from '../util/colors'
-import { PasswordComponent } from '../components/PasswordComponent'
-import { AuthNavProps } from '../routes/paramsList/AuthParamList'
-import { PasswordEnum } from '../util/enums'
-import { firebaseLogin } from '../services/firebaseAuth'
+import { View, Text, Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import DispatcherButton from '../components/DispatcherButton';
+import auth from '@react-native-firebase/auth';
+import { Dimensions } from 'react-native';
+import { colors } from '../util/colors';
+import { PasswordInputComponent } from '../components/PasswordInputComponent';
+import { AuthNavProps } from '../routes/paramsList/AuthParamList';
+import { ErrorFirebaseAuthEnum, PasswordEnum } from '../util/enums';
+import { EmailInputComponent } from '../components/EmailInputComponent';
+import { ErrorType } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
 const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: AuthNavProps<'Login'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<ErrorType | null>(null);
 
-  const loginHandler = async () => {
-    try {
-      if (email && password) {
-        const userCredential = await firebaseLogin(email, password);
-        console.log("Login userCredential: ", userCredential)
-      } else {
-        //!Error state
-        console.log("check email and password")
-      }
-    } catch (ex) {
-      //!Error state
-      console.log(`Error while signing in ${ex}`)
-    }
+  const loginHandler = () => {
+    auth().signInWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        console.log(userCredential)
+        setError(null)
+      })
+      .catch(ex => {
+        console.log(ex.message)
+        const errorMessage = ex.message.replace(ex.code, "").replace("[]", "")
+        setError({ code: ex.code.replace("[]", ""), message: errorMessage })
+      })
+
   }
 
 
@@ -46,23 +47,26 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
       </View>
 
       <View style={styles.inputsContainer} >
-        <TextInput
-          style={styles.inputText}
-          autoCapitalize="none"
-          placeholderTextColor="#5A5A89"
+        <EmailInputComponent
           placeholder='Your email'
-          onChangeText={(input) => setEmail(input)}
+          error={error}
+          setEmail={setEmail}
         />
-        <PasswordComponent
-          placeholder='Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.Password}
           type={PasswordEnum.Password}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={setPassword}
           setRePassword={() => ""}
+          error={error}
         />
 
         <View style={styles.line}></View>
+        {error &&
+          (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
+            error.code === ErrorFirebaseAuthEnum.NetworkError) ?
+          <Text style={styles.error}>{error.message}</Text> : null}
       </View>
 
       <View style={styles.btnsContainer}>
@@ -80,6 +84,7 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
           onPress={() => navigation.navigate('Signup')} />
       </View>
 
+
     </View>
   )
 }
@@ -89,7 +94,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputsContainer: {
-    flex: 5,
+    flex: 6,
     justifyContent: 'center',
     alignItems: "center",
     gap: 20,
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 5,
     alignItems: 'flex-start',
-    gap: 15,
+    gap: 12,
   },
   topImage: {
     width: '100%',
@@ -115,20 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     width: 0.88 * width,
     height: 2,
-    marginTop: '10%',
-  },
-  inputText: {
-    fontSize: 20,
-    width: "88%",
-    borderWidth: 2,
-    borderRadius: 4,
-    paddingVertical: 11,
-    paddingLeft: 16,
-    backgroundColor: "#FFFFFF",
-    borderColor: colors.gray,
-    color: colors.primaryBlackTwo,
-    fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
-    fontWeight: '400',
+    marginTop: '5%',
   },
   text: {
     marginLeft: 20,
@@ -138,6 +130,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.primaryBlackTwo
   },
+  error: {
+    textAlign: 'center',
+    color: colors.error,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+    paddingLeft: 2,
+    marginTop: -10
+  }
 });
 
 export default LoginScreen

@@ -22,6 +22,7 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
     auth().signInWithEmailAndPassword(email, password)
       .then(userCredential => {
         console.log(userCredential)
+        setError(null)
       })
       .catch(ex => {
         console.log(ex.message)

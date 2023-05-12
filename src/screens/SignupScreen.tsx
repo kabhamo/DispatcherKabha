@@ -33,6 +33,7 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
     auth().createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
         console.log(userCredential)
+        setError(null)
       })
       .catch(ex => {
         console.log(ex.message)

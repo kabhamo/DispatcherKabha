@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, Platform } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DispatcherButton from '../components/DispatcherButton';
 import auth from '@react-native-firebase/auth';
 import { Dimensions } from 'react-native';

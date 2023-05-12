@@ -1,45 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   Image,
   Platform,
   StyleSheet,
-  Text,
-  TextInput, View
+  Text, View
 } from 'react-native';
 import DispatcherButton from '../components/DispatcherButton';
 import { colors } from '../util/colors';
-import { PasswordComponent } from '../components/PasswordComponent';
+import { PasswordInputComponent } from '../components/PasswordInputComponent';
 import { AuthNavProps } from '../routes/paramsList/AuthParamList';
-import { PasswordEnum } from '../util/enums';
-import { firebaseSignin } from '../services/firebaseAuth';
-
+import { PasswordEnum, ErrorFirebaseAuthEnum } from '../util/enums';
+import { EmailInputComponent } from '../components/EmailInputComponent';
+import auth from '@react-native-firebase/auth';
+import { ErrorType } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
 const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: AuthNavProps<'Signup'>) => {
   const [visibility, setVisibility] = useState<boolean>(true);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [rePassword, setRePassword] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
+  const [error, setError] = useState<ErrorType | null>(null);
 
-  const signinHandler = async () => {
-    try {
-      if (email && rePassword && password === rePassword) {
-        //? save to redux
-        const userCredential = await firebaseSignin(email, password)
-        console.log("userCredential: ", userCredential)
-      } else {
-        //!Error state
-        console.log("check email and passwords")
-      }
-    } catch (ex) {
-      //!Error state
-      console.log(`Error while signing in ${ex}`)
+  const signinHandler = () => {
+    if (password !== rePassword) {
+      setError({ code: ErrorFirebaseAuthEnum.UnmatchedPassword, message: "Passwords does not match!" })
+      console.log("newError: ", error)
+      return
     }
+    auth().createUserWithEmailAndPassword(email, password)
+      .then(userCredential => {
+        console.log(userCredential)
+      })
+      .catch(ex => {
+        console.log(ex.message)
+        const errorMessage = ex.message.replace(ex.code, "").replace("[]", "")
+        setError({ code: ex.code.replace("[]", ""), message: errorMessage })
+      })
   }
-
 
   return (
     <View style={styles.container}>
@@ -55,32 +55,35 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
       </View>
 
       <View style={styles.inputsContainer} >
-        <TextInput
-          style={styles.inputText}
-          autoCapitalize="none"
-          placeholderTextColor="#5A5A89"
+        <EmailInputComponent
           placeholder='Your email'
-          onChangeText={(input) => setEmail(input)}
+          error={error}
+          setEmail={setEmail}
         />
-
-        <PasswordComponent
-          placeholder='Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.Password}
           type={PasswordEnum.Password}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={setPassword}
           setRePassword={() => ""}
+          error={error}
         />
-        <PasswordComponent
-          placeholder='Re-Enter Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.ReinterPassword}
           type={PasswordEnum.ReinterPassword}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={() => ""}
           setRePassword={setRePassword}
+          error={error}
         />
-
         <View style={styles.line}></View>
+        {error &&
+          (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
+            error.code === ErrorFirebaseAuthEnum.NetworkError) ?
+          <Text style={styles.error}>{error.message}</Text> : null}
+
       </View>
 
       <View style={styles.btnsContainer}>
@@ -107,10 +110,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputsContainer: {
-    flex: 7,
+    flex: 8,
     justifyContent: 'center',
     alignItems: "center",
-    gap: 20,
+    gap: 15,
     //backgroundColor: 'darkorange',
   },
   btnsContainer: {
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 5,
     alignItems: 'flex-start',
-    gap: 15,
+    gap: 10,
   },
   topImage: {
     width: '100%',
@@ -133,20 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     width: 0.88 * width,
     height: 2,
-    marginTop: '10%',
-  },
-  inputText: {
-    fontSize: 20,
-    width: "88%",
-    borderWidth: 2,
-    borderRadius: 4,
-    paddingVertical: 11,
-    paddingLeft: 16,
-    backgroundColor: "#FFFFFF",
-    borderColor: colors.gray,
-    color: colors.primaryBlackTwo,
-    fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
-    fontWeight: '400',
+    marginTop: '5%',
   },
   text: {
     marginLeft: 20,
@@ -156,6 +146,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.primaryBlackTwo
   },
+  error: {
+    textAlign: 'center',
+    color: colors.error,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+    paddingLeft: 2,
+    marginTop: -10
+  }
 });
 
 export default SignupScreen

@@ -14,6 +14,8 @@ import { PasswordEnum, ErrorFirebaseAuthEnum } from '../util/enums';
 import { EmailInputComponent } from '../components/EmailInputComponent';
 import auth from '@react-native-firebase/auth';
 import { ErrorType } from '../util/types';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { updateUserAction } from '../state/user/userSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -23,6 +25,8 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
   const [password, setPassword] = useState<string>("");
   const [rePassword, setRePassword] = useState<string>("");
   const [error, setError] = useState<ErrorType | null>(null);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user.value)
 
   const signinHandler = () => {
     if (password !== rePassword) {
@@ -32,7 +36,16 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
     }
     auth().createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
-        console.log(userCredential)
+        console.log(userCredential.user)
+        if (userCredential.user.email) {
+          const payloadAction = {
+            value: {
+              email: userCredential.user.email,
+              isLoggedIn: true
+            }
+          }
+          dispatch(updateUserAction(payloadAction))
+        }
         setError(null)
       })
       .catch(ex => {
@@ -41,6 +54,10 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
         setError({ code: ex.code.replace("[]", ""), message: errorMessage })
       })
   }
+
+  useEffect(() => {
+    console.log("signin - userState from redux store: ", user)
+  }, [user])
 
   return (
     <View style={styles.container}>

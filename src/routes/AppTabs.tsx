@@ -4,8 +4,6 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { AppParamList } from './paramsList/AppParamList';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
-import { Provider } from 'react-redux'
-import { store } from '../state/store';
 
 type AppTabsProp = {}
 

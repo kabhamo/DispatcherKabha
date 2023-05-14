@@ -47,6 +47,14 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
 
   useEffect(() => {
     console.log("login - userState from redux store: ", user)
+    //navigation.navigate('Home')
+    const testPayloadAction = {
+      value: {
+        email: 'mkabha54@gmail.com',
+        isLoggedIn: true
+      }
+    }
+    dispatch(updateUserAction(testPayloadAction))
   }, [user])
 
   return (

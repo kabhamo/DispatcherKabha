@@ -6,6 +6,7 @@ import { RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import useAxios from '../hooks/useAxios';
 import { Response } from '../util/response';
+import { getCongif } from '../../config/config';
 
 const Drawer = createDrawerNavigator();
 
@@ -27,25 +28,18 @@ const HomeDrawer = () => {
 
 
 export const HomeScreen: React.FC<TapNavProps<'Home'>> = ({ navigation }) => {
-  const endpoint = 'top-headlines?country=gb&apiKey=c63658d29f334769a7eb35ad39a27029';
+  const endpoint = `top-headlines?country=gb&apiKey=${getCongif().general.apiKey}`
   const method = 'get'
-  const { response, error, loading } = useAxios({ url: endpoint, method });
+  //const { response, error, loading } = useAxios({ url: endpoint, method });
 
-  useEffect(() => {
-    if (response) {
-      console.log("Arrresponse", response)
-      response.map((item) => {
-        console.log("item", item.title)
-      })
-
-
-      //let arrResponse: Response[] = [];
-      //arrResponse = arrResponse.concat(response['articles'])
-      //arrResponse.map((item) => {
-      //  console.log("item: ", item.title)
-      //})
-    }
-  }, [response]);
+  //useEffect(() => {
+  //  if (response) {
+  //    console.log("Arrresponse", response)
+  //    response.map((item) => {
+  //      console.log("item", item.title)
+  //    })
+  //  }
+  //}, [response]);
 
   return (
     <View style={styles.mainContainer}>

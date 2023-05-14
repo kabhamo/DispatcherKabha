@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios, { AxiosResponse } from 'axios'
 import { Response } from "../util/response";
+import { getCongif } from "../../config/config";
 
-axios.defaults.baseURL = 'https://newsapi.org/v2';
+axios.defaults.baseURL = getCongif().general.baseURL;
+
+//axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
 type AxiosProps = {
     url: string,
@@ -17,6 +20,8 @@ const useAxios = ({ url, method, body, headers } : AxiosProps) => {
 
     const fetchAxios = async () => { 
         try {
+            //? should be more dynamic
+            //? Add AxiosResponse 
             const response: Response[] = (await axios[method](url)).data['articles'];
             if (response) { 
                 setResponse(response)

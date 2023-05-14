@@ -21,9 +21,10 @@ export const AuthStack: React.FC<AuthStackProps> = ({ }) => {
             <Stack.Navigator
                 initialRouteName="Signup"
                 screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.white } }}>
-                <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Navigator>
         </NavigationContainer>
+
     );
 }

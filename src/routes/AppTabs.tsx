@@ -13,9 +13,9 @@ export const AppTabs: React.FC<AppTabsProp> = ({ }) => {
     return (
         <NavigationContainer>
             <Tab.Navigator
-                initialRouteName='Home'>
+                initialRouteName='Home' screenOptions={{ headerShown: false }}>
+                <Tab.Screen name="ProfileTab" component={ProfileScreen} />
                 <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Profile" component={ProfileScreen} />
                 <Tab.Screen name="Favorite" component={FavoriteScreen} />
             </Tab.Navigator>
         </NavigationContainer>

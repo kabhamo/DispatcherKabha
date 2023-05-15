@@ -1,58 +1,41 @@
-import { View, StyleSheet, Text } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, StyleSheet, Text, SafeAreaView, Image } from 'react-native'
+import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { TapNavProps } from '../routes/paramsList/AppParamList';
-import { RouteProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import useAxios from '../hooks/useAxios';
-import { Response } from '../util/response';
-import { getCongif } from '../../config/config';
+import { colors } from '../util/colors';
+import { DispatcherBar } from '../components/DispatcherBar';
+import { DispatcherFilterBar } from '../components/DispatcherFilterBar';
 
 const Drawer = createDrawerNavigator();
 
 type HomeScreenProps = {}
 
-const TestDrawer = ({ }) => {
-  return (
-    <View><Text>TestDrawer1</Text></View>
-  )
-}
-
-const HomeDrawer = () => {
-  return (
-    <Drawer.Navigator >
-      <Drawer.Screen name="Feed" component={TestDrawer} />
-    </Drawer.Navigator>
-  )
-}
-
 
 export const HomeScreen: React.FC<TapNavProps<'Home'>> = ({ navigation }) => {
-  const endpoint = `top-headlines?country=gb&apiKey=${getCongif().general.apiKey}`
-  const method = 'get'
-  //const { response, error, loading } = useAxios({ url: endpoint, method });
 
-  //useEffect(() => {
-  //  if (response) {
-  //    console.log("Arrresponse", response)
-  //    response.map((item) => {
-  //      console.log("item", item.title)
-  //    })
-  //  }
-  //}, [response]);
 
   return (
-    <View style={styles.mainContainer}>
-      <Text>HomeScreen</Text>
-      {/*<HomeDrawer />*/}
-    </View>
+    <SafeAreaView style={styles.mainContainer}>
+      <View style={styles.appBarContainer}>
+        <DispatcherBar />
+        <DispatcherFilterBar />
+      </View>
+      <View style={styles.articleContainer}></View>
+    </SafeAreaView>
+
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: colors.primaryBlack
+  },
+  appBarContainer: {
+    flex: 1,
+  },
+  articleContainer: {
+    flex: 6,
+    backgroundColor: colors.gray
   },
 })

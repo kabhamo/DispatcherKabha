@@ -41,6 +41,7 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
           const payloadAction = {
             value: {
               email: userCredential.user.email,
+              token: "",
               isLoggedIn: true
             }
           }

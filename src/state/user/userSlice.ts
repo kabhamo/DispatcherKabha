@@ -4,9 +4,8 @@ import type { RootState } from '../store';
 // Define a type for the slice state
 interface UserState {
     value: {
-        //name: string,
         email: string,
-        //password: string,
+        token: string
         isLoggedIn: boolean
     }
 }
@@ -14,9 +13,8 @@ interface UserState {
 // Define the initial state using that type
 const initialState: UserState = {
     value: {
-        //name: "",
         email: "",
-        //password: "",
+        token:"",
         isLoggedIn: false
     }
 }

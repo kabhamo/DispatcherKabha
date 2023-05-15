@@ -11,6 +11,7 @@ import { EmailInputComponent } from '../components/EmailInputComponent';
 import { ErrorType } from '../util/types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { updateUserAction } from '../state/user/userSlice';
+import { storeData } from '../services/asyncStorage';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -24,20 +25,24 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
 
   const loginHandler = () => {
     auth().signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
+      .then(async userCredential => {
         console.log(userCredential.user)
-        if (userCredential.user.email) {
+        const idToken = await userCredential.user.getIdToken()
+        if (userCredential.user.email && idToken) {
           const payloadAction = {
             value: {
               email: userCredential.user.email,
+              token: idToken,
               isLoggedIn: true
             }
           }
+          await storeData(payloadAction.value)
           dispatch(updateUserAction(payloadAction))
         }
         setError(null)
       })
       .catch(ex => {
+        //! payloadAction with error
         console.log(ex.message)
         const errorMessage = ex.message.replace(ex.code, "").replace("[]", "")
         setError({ code: ex.code.replace("[]", ""), message: errorMessage })
@@ -47,6 +52,14 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
 
   useEffect(() => {
     console.log("login - userState from redux store: ", user)
+    const testPayloadAction = {
+      value: {
+        email: 'mkabha54@gmail.com',
+        token: "",
+        isLoggedIn: true
+      }
+    }
+    dispatch(updateUserAction(testPayloadAction))
   }, [user])
 
   return (

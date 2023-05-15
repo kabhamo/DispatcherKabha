@@ -5,6 +5,7 @@ import { TapNavProps } from '../routes/paramsList/AppParamList';
 import { colors } from '../util/colors';
 import { DispatcherBar } from '../components/DispatcherBar';
 import { DispatcherFilterBar } from '../components/DispatcherFilterBar';
+import { DispatcherArticleCard } from '../components/DispatcherArticleCard';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,7 +21,11 @@ export const HomeScreen: React.FC<TapNavProps<'Home'>> = ({ navigation }) => {
         <DispatcherBar />
         <DispatcherFilterBar />
       </View>
-      <View style={styles.articleContainer}></View>
+      <View style={styles.articleContainer}>
+        <Text>Last Login</Text>
+        <Text>Top Headlines in UK</Text>
+        <DispatcherArticleCard />
+      </View>
     </SafeAreaView>
 
   );
@@ -35,7 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   articleContainer: {
-    flex: 6,
+    flex: 5,
     backgroundColor: colors.gray
   },
 })

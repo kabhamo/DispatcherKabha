@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export type AppParamList = {
     Home: undefined;
-    Profile: undefined;
+    ProfileTab: undefined;
     Favorite: undefined;
 }
 

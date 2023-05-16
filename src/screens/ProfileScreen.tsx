@@ -1,13 +1,18 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import { AppDrawer } from '../routes/AppDrawer'
+import { colors } from '../util/colors'
 
-type ProfileScreenProps = {
+type ProfileScreenProps = {}
 
-}
 export const ProfileScreen: React.FC<ProfileScreenProps> = ({ }) => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
     return (
         <View style={styles.mainContainer}>
-            <Text>ProfileScreenScreen</Text>
+            <TouchableOpacity ></TouchableOpacity>
+            {isDrawerOpen ? <AppDrawer /> :
+                <Text>ProfileScreenScreen</Text>
+            }
         </View>
     );
 }
@@ -17,5 +22,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: colors.primaryBlackTwo
     },
 })

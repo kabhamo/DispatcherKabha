@@ -1,10 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { FavoriteScreenNavigationProp } from '../routes/types/navigationTypes';
 
-type FavoriteScreenProps = {
 
-}
-export const FavoriteScreen: React.FC<FavoriteScreenProps> = ({ }) => {
+export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigation, route }: FavoriteScreenNavigationProp) => {
     return (
         <View style={styles.mainContainer}>
             <Text>FavoriteScreenScreen</Text>

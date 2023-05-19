@@ -1,14 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type asyncStorageProp = {
-    email: string,
-    token: string,
-    isLoggedIn: boolean
-}
-export const storeData = async (value: asyncStorageProp) => {
+
+const USER_AUTH_KEY: string = '@userAuthKey';
+export const storeData = async (key: string, value: any) => {
     try {
         const stringifyValue =JSON.stringify(value)
-      await AsyncStorage.setItem('@userAuthKey', stringifyValue)
+      await AsyncStorage.setItem(key, stringifyValue)
     } catch (ex) {
       // saving error
         console.log("asyncStorage-store Error: ",ex)

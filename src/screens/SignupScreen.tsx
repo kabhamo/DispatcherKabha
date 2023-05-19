@@ -4,22 +4,23 @@ import {
   Image,
   Platform,
   StyleSheet,
-  Text, View
+  Text, View, TouchableOpacity
 } from 'react-native';
 import DispatcherButton from '../components/DispatcherButton';
 import { colors } from '../util/colors';
 import { PasswordInputComponent } from '../components/PasswordInputComponent';
-import { AuthNavProps } from '../routes/paramsList/AuthParamList';
-import { PasswordEnum, ErrorFirebaseAuthEnum } from '../util/enums';
+import { SignupScreenNavigationProp } from '../routes/types/navigationTypes';
+import { PasswordEnum, ErrorFirebaseAuthEnum, AsyncLocalStorageKeysType } from '../util/enums';
 import { EmailInputComponent } from '../components/EmailInputComponent';
 import auth from '@react-native-firebase/auth';
 import { ErrorType } from '../util/types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { updateUserAction } from '../state/user/userSlice';
+import { storeData } from '../services/asyncStorage';
 
 const { height, width } = Dimensions.get('screen')
 
-const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: AuthNavProps<'Signup'>) => {
+const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route }: SignupScreenNavigationProp) => {
   const [visibility, setVisibility] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -60,6 +61,12 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
     console.log("signin - userState from redux store: ", user)
   }, [user])
 
+  //!toDelete
+  const openOnBoarding = async () => {
+    console.log("openOnBoarding")
+    await storeData(AsyncLocalStorageKeysType.OnBoardingKey, true)
+  }
+
   return (
     <View style={styles.container}>
 
@@ -71,6 +78,8 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
           source={require('../assets/LoginImage.png')}
         />
         <Text style={styles.text}> Signup </Text>
+
+
       </View>
 
       <View style={styles.inputsContainer} >

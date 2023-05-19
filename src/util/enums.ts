@@ -11,5 +11,9 @@ export enum ErrorFirebaseAuthEnum {
     UnmatchedPassword = "local/unmatched-passwords",
     WeakPassword = "auth/weak-password",
     WrongPassword = "auth/wrong-password"
-    
+}
+
+export enum AsyncLocalStorageKeysType { 
+    UserAuthKey = "@userAuthKey",
+    OnBoardingKey = "@isOnBoarding"
 }

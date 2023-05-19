@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios, { AxiosResponse } from 'axios'
-import { Response } from "../util/response";
+import { ArticleResponse } from "../util/types";
 import { getCongif } from "../../config/config";
 
 axios.defaults.baseURL = getCongif().general.baseURL;
@@ -14,7 +14,7 @@ type AxiosProps = {
     headers?: string
 }
 const useAxios = ({ url, method, body, headers } : AxiosProps) => { 
-    const [response, setResponse] = useState<Response[] | null>(null);
+    const [response, setResponse] = useState<ArticleResponse[] | null>(null);
     const [error, setError] = useState('');
     const [loading, setloading] = useState(true);
 
@@ -22,7 +22,7 @@ const useAxios = ({ url, method, body, headers } : AxiosProps) => {
         try {
             //? should be more dynamic
             //? Add AxiosResponse 
-            const response: Response[] = (await axios[method](url)).data['articles'];
+            const response: ArticleResponse[] = (await axios[method](url)).data['articles'];
             if (response) { 
                 setResponse(response)
             }

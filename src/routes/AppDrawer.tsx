@@ -1,34 +1,44 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text } from 'react-native'
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { ProfileDrawerParamList } from './paramsList/AppDrawerList';
-//import { ProfileScreen } from '../screens/ProfileScreen';
+import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
+import AppTabs from './AppTabs';
+import { DrawerParamList } from './types/navigationTypes';
+//import Icon from 'react-native-vector-icons/Icon';
+import Icon from 'react-native-vector-icons/Feather';
 
-type AppDrawerProps = {}
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
-const Drawer = createDrawerNavigator<ProfileDrawerParamList>();
-
-const TestDrawer = ({ }) => {
+function TestDrawer() {
     return (
         <View>
-            <Text>TestDrawer</Text>
+            <Text>Drawer1</Text>
         </View>
     )
 }
-const ProfileEmpty = ({ }) => {
+function CustomDrawerContent(props: DrawerContentComponentProps) {
     return (
-        <View>
-        </View>
-    )
+        <DrawerContentScrollView {...props}>
+            {/* SafeView */}
+            <DrawerItemList {...props} />
+            <DrawerItem icon={() => { return <Icon color={'red'} size={12} name={'heart'} /> }}
+                label="Sources" onPress={() => <TestDrawer />} />
+        </DrawerContentScrollView>
+    );
 }
 
-export const AppDrawer: React.FC<AppDrawerProps> = ({ }) => {
+
+function AppDrawer(): JSX.Element {
     return (
-        <Drawer.Navigator screenOptions={{ headerShown: false, }}>
-            <Drawer.Screen name="Profile" component={ProfileEmpty} />
-            <Drawer.Screen name="Settings" component={TestDrawer} />
-            <Drawer.Screen name="Terms" component={TestDrawer} />
-            <Drawer.Screen name="Logout" component={TestDrawer} />
+        <Drawer.Navigator
+            screenOptions={{ headerShown: false, drawerPosition: 'right' }}
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
+            <Drawer.Screen name="SearchIn" options={{ title: "Search", }} component={AppTabs} />
+            <Drawer.Screen name="Sources" component={TestDrawer} />
+            <Drawer.Screen name="Language" component={TestDrawer} />
+            <Drawer.Screen name="Dates" component={TestDrawer} />
         </Drawer.Navigator>
     );
 }
+
+export default AppDrawer;

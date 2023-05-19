@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../util/colors';
 
 type DispatcherFilterBarProps = {
-
+    setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function SortByButton(): JSX.Element {
@@ -19,17 +19,21 @@ function SortByButton(): JSX.Element {
     )
 }
 
-export const DispatcherFilterBar: React.FC<DispatcherFilterBarProps> = ({ }) => {
+function SlidersSortButton({ setOpenDrawer }: DispatcherFilterBarProps): JSX.Element {
+    return (
+        <TouchableOpacity
+            onPress={() => setOpenDrawer(true)}>
+            <Icon name="sliders" size={30} color={colors.primaryBlackTwo} />
+        </TouchableOpacity>
+    )
+}
+
+export const DispatcherFilterBar: React.FC<DispatcherFilterBarProps> = ({ setOpenDrawer }) => {
     return (
         <AppBar
             style={styles.InnerFilterBarContainer}
             leading={props => (<SortByButton />)}
-            trailing={props => (
-                <IconButton
-                    icon={props => <Icon name="sliders" size={30} color={colors.primaryBlackTwo} />}
-                    {...props}
-                />
-            )}
+            trailing={props => (<SlidersSortButton setOpenDrawer={setOpenDrawer} />)}
         />
     );
 }

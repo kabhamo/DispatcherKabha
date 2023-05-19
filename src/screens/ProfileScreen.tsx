@@ -1,18 +1,24 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { AppDrawer } from '../routes/AppDrawer'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ProfileScreenNavigationProp } from '../routes/types/navigationTypes'
 import { colors } from '../util/colors'
 
 type ProfileScreenProps = {}
 
-export const ProfileScreen: React.FC<ProfileScreenProps> = ({ }) => {
+export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigation, route }: ProfileScreenNavigationProp) => {
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+
+    useEffect(() => {
+
+    }, [isDrawerOpen])
     return (
         <View style={styles.mainContainer}>
             <TouchableOpacity ></TouchableOpacity>
-            {isDrawerOpen ? <AppDrawer /> :
+            {/*{isDrawerOpen ? <AppDrawer /> :
                 <Text>ProfileScreenScreen</Text>
-            }
+            }*/}
+            <Text>ProfileScreenScreen</Text>
+            {/*<AppDrawer />*/}
         </View>
     );
 }

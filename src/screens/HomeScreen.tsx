@@ -1,25 +1,25 @@
-import { View, StyleSheet, Text, SafeAreaView, Image } from 'react-native'
-import React from 'react'
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { TapNavProps } from '../routes/paramsList/AppParamList';
-import { colors } from '../util/colors';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { DispatcherArticleCard } from '../components/DispatcherArticleCard';
 import { DispatcherBar } from '../components/DispatcherBar';
 import { DispatcherFilterBar } from '../components/DispatcherFilterBar';
-import { DispatcherArticleCard } from '../components/DispatcherArticleCard';
-
-const Drawer = createDrawerNavigator();
-
-type HomeScreenProps = {}
+import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
+import { colors } from '../util/colors';
 
 
-export const HomeScreen: React.FC<TapNavProps<'Home'>> = ({ navigation }) => {
+export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
+  useEffect(() => {
+    openDrawer && navigation.openDrawer();
+    return () => setOpenDrawer(false); //! it works but is it the right way?
+  }, [openDrawer]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.appBarContainer}>
         <DispatcherBar />
-        <DispatcherFilterBar />
+        <DispatcherFilterBar setOpenDrawer={setOpenDrawer} />
       </View>
       <View style={styles.articleContainer}>
         <Text>Last Login</Text>

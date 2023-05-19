@@ -1,25 +1,21 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import { HomeScreen } from '../screens/HomeScreen';
-import { AppParamList } from './paramsList/AppParamList';
+import type { BottomTabsParamList } from './types/navigationTypes';
 import { FavoriteScreen } from '../screens/FavoriteScreen';
 import { ProfileScreen } from '../screens/ProfileScreen';
 
-type AppTabsProp = {}
 
-const Tab = createBottomTabNavigator<AppParamList>();
+const Tab = createBottomTabNavigator<BottomTabsParamList>();
 
-export const AppTabs: React.FC<AppTabsProp> = ({ }) => {
+function AppTabs(): JSX.Element {
     return (
-        <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName='Home' screenOptions={{ headerShown: false }}>
-                <Tab.Screen name="ProfileTab" component={ProfileScreen} />
-                <Tab.Screen name="Home" component={HomeScreen} />
-                <Tab.Screen name="Favorite" component={FavoriteScreen} />
-            </Tab.Navigator>
-        </NavigationContainer>
-
-
+        <Tab.Navigator
+            initialRouteName='Home' screenOptions={{ headerShown: false }}>
+            <Tab.Screen name="ProfileTab" component={ProfileScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Favorite" component={FavoriteScreen} />
+        </Tab.Navigator>
     );
 }
+
+export default AppTabs;

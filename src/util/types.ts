@@ -19,7 +19,7 @@ export type ArticleResponse = {
     content: string | null
 }
 
-export type AsyncStorageProp = {
+export type UserCredential = {
     email: string,
     token: string,
     isLoggedIn: boolean

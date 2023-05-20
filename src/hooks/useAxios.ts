@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios, { AxiosResponse } from 'axios'
 import { ArticleResponse } from "../util/types";
-import { getCongif } from "../../config/config";
+import { getConfig } from "../../config/config";
 
-axios.defaults.baseURL = getCongif().general.baseURL;
+axios.defaults.baseURL = getConfig().general.baseURL;
 
 //axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 

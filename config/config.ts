@@ -7,7 +7,7 @@ interface Config {
     };
 }
 
-export function getCongif(): Config { 
+export function getConfig(): Config { 
     return {
         general: {
             baseURL: devConfig.baseURL,

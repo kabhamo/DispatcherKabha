@@ -17,7 +17,7 @@ import { AsyncLocalStorageKeysType } from './util/enums';
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function DispatcherApp(): JSX.Element {
-    const user = useAppSelector(state => state.user.value)
+    //const user = useAppSelector(state => state.user.value)
     const [isOnBoarding, setIsOnBoarding] = useState<boolean>(false);
 
     useEffect(() => {
@@ -48,7 +48,7 @@ function DispatcherApp(): JSX.Element {
         <View style={{ flex: 1 }}>
             <NavigationContainer>
                 <RootStack.Navigator
-                    initialRouteName={isOnBoarding ? "OnBoarding" : "Auth"}
+                    initialRouteName='OnBoarding'//{isOnBoarding ? "OnBoarding" : "Auth"}
                     screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.white } }}>
                     <RootStack.Screen name="Auth" component={AuthStack} />
                     <RootStack.Screen name="Drawer" component={AppDrawer} />

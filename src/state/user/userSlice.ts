@@ -13,8 +13,7 @@ export const fetchUserCredential = createAsyncThunk('userCredential/fetchUserCre
         //return UserCredential;
     }
 )
-//! There is no need for return value 
-//! the data is stored in asyncStorage not redux store 
+
 // Define a type for the slice state
 interface UserState {
     value: UserCredential;

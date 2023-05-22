@@ -8,9 +8,7 @@ import { NavigationContainer } from '@react-navigation/native';
 function App(): JSX.Element {
   return (
     <Provider store={store}>
-      {/*<NavigationContainer>*/}
       <DispatcherApp />
-      {/*</NavigationContainer>*/}
     </Provider>
   );
 }

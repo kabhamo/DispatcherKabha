@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { UserCredential } from '../../util/types'
+import { UserCredential, SerializedError } from '../../util/types'
 import { loginAndSetUserCredential } from '../../services/apiService'
 
 interface Params {
     email: string;
     password: string;
- }
+}
+
 // First, create the thunk
 export const fetchUserCredential = createAsyncThunk('userCredential/fetchUserCredential',
     async ({email, password} : Params, thunkAPI) => {
-        await loginAndSetUserCredential(email, password)
-        //return UserCredential;
+        const userCredential = await loginAndSetUserCredential(email, password);
+        return userCredential;
     }
 )
 
@@ -18,7 +19,7 @@ export const fetchUserCredential = createAsyncThunk('userCredential/fetchUserCre
 interface UserState {
     value: UserCredential;
     loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-    error: null;
+    error: SerializedError | null;
 }
 
 // Define the initial state using that type
@@ -34,22 +35,24 @@ const initialState: UserState = {
 
 export const userSlice = createSlice({
   name: 'userCredential',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
     reducers: {},
     extraReducers(builder) {
-      builder.addCase(fetchUserCredential.fulfilled, (state, action) => { 
-          //const state.value
-        //  const { email, token, isLoggedIn } = action.payload;
-        //  state.value.email = email;
-        //  state.value.token = token;
-        //  state.value.isLoggedIn = isLoggedIn;
-        //  state.loading = 'succeeded';
-        //  console.log("extraReducers: ",state.value)
-      })
+        builder.addCase(fetchUserCredential.fulfilled, (state, action) => {
+            state.value = action.payload;
+            state.loading = 'succeeded';
+            console.log("fulfilled the new state is: ", state)
+        })
+        builder.addCase(fetchUserCredential.pending, (state) => {
+            state.loading = 'pending'
+            console.log("pending, the thunk is working...", state)
+        }); 
+        builder.addCase(fetchUserCredential.rejected, (state, action) => {
+            state.loading = 'failed';
+            state.error = action.error;
+            console.log("rejected: ", state)
+        }); 
     },
 })
-
-//export const {  updateUserAction } = userSlice.actions
 
 export default userSlice.reducer;

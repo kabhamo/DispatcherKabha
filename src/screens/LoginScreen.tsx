@@ -1,18 +1,15 @@
-import { View, Text, Image, StyleSheet, Platform } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import Lottie from 'lottie-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import DispatcherButton from '../components/DispatcherButton';
-import auth from '@react-native-firebase/auth';
-import { Dimensions } from 'react-native';
-import { colors } from '../util/colors';
-import { PasswordInputComponent } from '../components/PasswordInputComponent';
-import { ErrorFirebaseAuthEnum, PasswordEnum, AsyncLocalStorageKeysType } from '../util/enums';
 import { EmailInputComponent } from '../components/EmailInputComponent';
-import { ErrorType } from '../util/types';
+import { PasswordInputComponent } from '../components/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { userSlice } from '../state/user/userSlice';
-import { storeData } from '../services/asyncStorage';
 import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
 import { fetchUserCredential } from '../state/user/userSlice';
+import { colors } from '../util/colors';
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
+import { SerializedError } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -21,18 +18,31 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
   const [visibility, setVisibility] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<ErrorType | null>(null);
+  const [error, setError] = useState<SerializedError | null>(null);
   //? ============Redux============
   const dispatch = useAppDispatch();
-  const user = useAppSelector(state => state.user.value)
+  const user = useAppSelector(state => state.user)
+
+  const animationRef = useRef<Lottie>(null)
   //todo add another dispatcher for the onBoarding, maybe there is no need
+
+  useEffect(() => {
+    animationRef.current?.play()
+    // Or set a specific startFrame and endFrame with:
+    animationRef.current?.play(30, 120);
+  }, [])
+
+  useEffect(() => {
+    console.log(user.loading)
+    if (user.error.code || user.error.message) {
+      setError(user.error)
+    }
+  }, [user])
 
   const loginHandler = async () => {
     try {
-      const result = await dispatch(fetchUserCredential({ email, password })).unwrap()
-      console.log("result at loginHandler ", result)
+      await dispatch(fetchUserCredential({ email, password })).unwrap()
       navigation.navigate('OnBoarding');
-
     } catch (ex) {
       console.log("Error at loginHandler ", ex)
     }
@@ -70,24 +80,36 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
         <View style={styles.line}></View>
         {error &&
           (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
-            error.code === ErrorFirebaseAuthEnum.NetworkError) ?
+            error.code === ErrorFirebaseAuthEnum.NetworkError ||
+            error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
           <Text style={styles.error}>{error.message}</Text> : null}
       </View>
 
+
+
       <View style={styles.btnsContainer}>
-        <DispatcherButton
-          type='login'
-          title="LOGIN"
-          backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
-          textColorStyleType={{ color: colors.white }}
-          onPress={() => loginHandler()} />
-        <DispatcherButton
-          type='signup'
-          title="SIGNUP"
-          backgroundColorStyleType={{ backgroundColor: colors.gray }}
-          textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => navigation.navigate('Signup')} />
+        {user.loading === LoadingStatus.Pending || user.loading === LoadingStatus.Succeeded ?
+          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+          :
+          <>
+            <DispatcherButton
+              type='login'
+              title="LOGIN"
+              backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
+              textColorStyleType={{ color: colors.white }}
+              onPress={() => loginHandler()} />
+
+            <DispatcherButton
+              type='signup'
+              title="SIGNUP"
+              backgroundColorStyleType={{ backgroundColor: colors.gray }}
+              textColorStyleType={{ color: colors.primaryBlackTwo }}
+              onPress={() => navigation.navigate('Auth', { screen: 'Signup' })} />
+          </>
+        }
+
       </View>
+
 
 
     </View>

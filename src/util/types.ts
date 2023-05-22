@@ -1,17 +1,13 @@
-import { ErrorFirebaseAuthEnum } from "./enums";
 
 export interface ErrorType {
-    code: ErrorFirebaseAuthEnum;
-    message: string;
+    code?: string;
+    message?: string;
 }
 
 export interface SerializedError {
-    name?: string
-    message?: string
-    stack?: string
-    code?: string
+    message: string
+    code: string
 }
-
 
 export type ArticleResponse = {
     source: {

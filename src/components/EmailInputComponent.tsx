@@ -12,7 +12,8 @@ type EmailInputComponentProps = {
 export const EmailInputComponent: React.FC<EmailInputComponentProps> = ({ placeholder, error, setEmail }) => {
     const isEmailError = error &&
         (error.code === ErrorFirebaseAuthEnum.EmailExist ||
-            error.code === ErrorFirebaseAuthEnum.InvalidEmail)
+            error.code === ErrorFirebaseAuthEnum.InvalidEmail ||
+            error.code === ErrorFirebaseAuthEnum.UserNotFound)
     return (
         <View>
             <View style={styles.mainContainer}>
@@ -46,16 +47,17 @@ const styles = StyleSheet.create({
         paddingVertical: 11,
         paddingLeft: 16,
         backgroundColor: "#FFFFFF",
-        //borderColor: colors.gray,
         color: colors.primaryBlackTwo,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: '400',
     },
     error: {
         color: colors.error,
+        textAlign: 'center',
         fontSize: 14,
         fontWeight: '400',
         lineHeight: 18,
-        paddingLeft: 2
+        width: 300
+        //paddingLeft: 2
     }
 })

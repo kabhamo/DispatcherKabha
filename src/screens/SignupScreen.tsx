@@ -1,22 +1,21 @@
+import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
   Platform,
   StyleSheet,
-  Text, View, TouchableOpacity
+  Text, View
 } from 'react-native';
 import DispatcherButton from '../components/DispatcherButton';
-import { colors } from '../util/colors';
-import { PasswordInputComponent } from '../components/PasswordInputComponent';
-import { SignupScreenNavigationProp } from '../routes/types/navigationTypes';
-import { PasswordEnum, ErrorFirebaseAuthEnum, AsyncLocalStorageKeysType } from '../util/enums';
 import { EmailInputComponent } from '../components/EmailInputComponent';
-import auth from '@react-native-firebase/auth';
-import { ErrorType } from '../util/types';
+import { PasswordInputComponent } from '../components/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-//import { updateUserAction } from '../state/user/userSlice';
-import { storeData } from '../services/asyncStorage';
+import { SignupScreenNavigationProp } from '../routes/types/navigationTypes';
+import { fetchUserCredential } from '../state/user/userSlice';
+import { colors } from '../util/colors';
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
+import { SerializedError } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -25,47 +24,26 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rePassword, setRePassword] = useState<string>("");
-  const [error, setError] = useState<ErrorType | null>(null);
+  const [error, setError] = useState<SerializedError | null>(null);
   const dispatch = useAppDispatch();
-  const user = useAppSelector(state => state.user.value)
+  const user = useAppSelector(state => state.user)
 
-  const signinHandler = () => {
-    if (password !== rePassword) {
-      setError({ code: ErrorFirebaseAuthEnum.UnmatchedPassword, message: "Passwords does not match!" })
-      console.log("newError: ", error)
-      return
+  useEffect(() => {
+    console.log("useEffect:", user.error)
+    if (user.error.code || user.error.message) {
+      setError(user.error)
     }
-    auth().createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        console.log(userCredential.user)
-        if (userCredential.user.email) {
-          const payloadAction = {
-            value: {
-              email: userCredential.user.email,
-              token: "",
-              isLoggedIn: true
-            }
-          }
-          //dispatch(updateUserAction(payloadAction))
-        }
-        setError(null)
-      })
-      .catch(ex => {
-        console.log(ex.message)
-        const errorMessage = ex.message.replace(ex.code, "").replace("[]", "")
-        setError({ code: ex.code.replace("[]", ""), message: errorMessage })
-      })
+  }, [user])
+
+  const signinHandler = async () => {
+    try {
+      await dispatch(fetchUserCredential({ email, password, rePassword })).unwrap()
+      navigation.navigate('OnBoarding');
+    } catch (ex) {
+      console.log("Error at signinHandler ", ex)
+    }
   }
 
-  //useEffect(() => {
-  //  console.log("signin - userState from redux store: ", user)
-  //}, [user])
-
-  //!toDelete
-  const openOnBoarding = async () => {
-    console.log("openOnBoarding")
-    await storeData(AsyncLocalStorageKeysType.OnBoardingKey, true)
-  }
 
   return (
     <View style={styles.container}>
@@ -109,24 +87,31 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
         <View style={styles.line}></View>
         {error &&
           (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
-            error.code === ErrorFirebaseAuthEnum.NetworkError) ?
+            error.code === ErrorFirebaseAuthEnum.NetworkError ||
+            error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
           <Text style={styles.error}>{error.message}</Text> : null}
 
       </View>
 
       <View style={styles.btnsContainer}>
-        <DispatcherButton
-          type='signup'
-          title="SIGNUP"
-          backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
-          textColorStyleType={{ color: colors.white }}
-          onPress={() => signinHandler()} />
-        <DispatcherButton
-          type='login'
-          title="LOGIN"
-          backgroundColorStyleType={{ backgroundColor: colors.gray }}
-          textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => navigation.navigate('Login')} />
+        {user.loading === LoadingStatus.Pending || user.loading === LoadingStatus.Succeeded ?
+          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+          :
+          <>
+            <DispatcherButton
+              type='signup'
+              title="SIGNUP"
+              backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
+              textColorStyleType={{ color: colors.white }}
+              onPress={() => signinHandler()} />
+            <DispatcherButton
+              type='login'
+              title="LOGIN"
+              backgroundColorStyleType={{ backgroundColor: colors.gray }}
+              textColorStyleType={{ color: colors.primaryBlackTwo }}
+              onPress={() => navigation.navigate('Auth', { screen: 'Login' })} />
+          </>
+        }
       </View>
 
     </View>
@@ -142,14 +127,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: "center",
     gap: 15,
-    //backgroundColor: 'darkorange',
   },
   btnsContainer: {
     flex: 3,
     alignItems: "center",
     justifyContent: 'center',
     gap: 20,
-    //backgroundColor: 'green',
   },
   imageContainer: {
     flex: 5,

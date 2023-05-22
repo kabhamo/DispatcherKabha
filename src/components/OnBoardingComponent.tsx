@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dimensions, Platform, StyleSheet, Text } from 'react-native'
+import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native'
 import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { colors } from '../util/colors'
 import { PageInterface } from '../util/constants'
@@ -41,8 +41,17 @@ export const OnBoardingComponent: React.FC<OnBoardingComponentProps> = ({ page: 
     return (
 
         <Animated.View style={[styles.mainContainer, mainContainerAnimationStyle]}>
-            <Text style={[styles.text, { flex: 5 }]}>{title}</Text>
-            <Text style={[styles.text, { flex: 4 }]}>{description}</Text>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[styles.titleText]}>{title}</Text>
+            </View>
+
+            <View style={{ flex: 2, alignItems: 'center' }}>
+                <Text style={[styles.text]}>{description}</Text>
+            </View>
+
+            <View style={{ flex: 3, }}>
+
+            </View>
         </Animated.View>
     );
 }
@@ -50,16 +59,20 @@ export const OnBoardingComponent: React.FC<OnBoardingComponentProps> = ({ page: 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        height: height,
         width: width,
+    },
+    titleText: {
+        fontSize: 30,
+        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
+        fontWeight: "700",
+        color: colors.white,
+        textAlign: 'center',
     },
     text: {
         fontSize: 18,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: "500",
         color: colors.white,
-        textAlign: 'center'
+        textAlign: 'center',
     },
 })

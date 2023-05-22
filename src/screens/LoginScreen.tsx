@@ -9,9 +9,10 @@ import { ErrorFirebaseAuthEnum, PasswordEnum, AsyncLocalStorageKeysType } from '
 import { EmailInputComponent } from '../components/EmailInputComponent';
 import { ErrorType } from '../util/types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { updateUserAction } from '../state/user/userSlice';
+import { userSlice } from '../state/user/userSlice';
 import { storeData } from '../services/asyncStorage';
 import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
+import { fetchUserCredential } from '../state/user/userSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -24,34 +25,11 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
   //? ============Redux============
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user.value)
+  //todo add another dispatcher for the onBoarding, maybe there is no need
 
   const loginHandler = () => {
-    auth().signInWithEmailAndPassword(email, password)
-      .then(async userCredential => {
-        console.log(userCredential.user)
-        const idToken = await userCredential.user.getIdToken()
-        if (userCredential.user.email && idToken) {
-          const payloadAction = {
-            value: {
-              email: userCredential.user.email,
-              token: idToken,
-              isLoggedIn: true
-            }
-          }
-          await storeData(AsyncLocalStorageKeysType.UserAuthKey, payloadAction.value)
-          await storeData(AsyncLocalStorageKeysType.OnBoardingKey, false); //! testing condition - toDelete
-          dispatch(updateUserAction(payloadAction))
-          navigation.navigate('OnBoarding');
-        }
-        setError(null)
-      })
-      .catch(ex => {
-        //! payloadAction with error
-        console.log(ex.message)
-        const errorMessage = ex.message.replace(ex.code, "").replace("[]", "")
-        setError({ code: ex.code.replace("[]", ""), message: errorMessage })
-      })
-
+    dispatch(fetchUserCredential({ email, password }))
+    navigation.navigate('OnBoarding');
   }
 
   return (

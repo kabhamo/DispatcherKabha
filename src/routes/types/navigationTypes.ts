@@ -11,6 +11,11 @@ export type RootStackParamList = {
 
 export type OnBoardingScreenNavigationProp = NativeStackScreenProps<RootStackParamList, 'OnBoarding'>
 
+//export type NewBoardingScreenNavigationProp = CompositeScreenProps<
+//    NativeStackScreenProps<RootStackParamList, 'OnBoarding'>,
+
+//    >
+
 export type AuthParamList = {
     Login: undefined;
     Signup: undefined;
@@ -26,6 +31,13 @@ export type SignupScreenNavigationProp = CompositeScreenProps<
     NativeStackScreenProps<AuthParamList,'Signup'>,
     NativeStackScreenProps<RootStackParamList>
     >;    
+
+export type DrawerParamList = { 
+    SearchIn: NavigatorScreenParams<BottomTabsParamList>; //tabs
+    Sources: undefined;
+    Language: undefined;
+    Dates: undefined;
+}
 
 export type BottomTabsParamList = {
     Home: undefined;
@@ -52,34 +64,4 @@ export type FavoriteScreenNavigationProp = CompositeScreenProps<
 
 
 
-export type DrawerParamList = { 
-    SearchIn: NavigatorScreenParams<BottomTabsParamList>; //tabs
-    Sources: undefined;
-    Language: undefined;
-    Dates: undefined;
-}
-
-//export type ProfileScreenDrawerParamList = {
-//    Settings: undefined;
-//    Terms: undefined;
-//    Logout: undefined;
-//}
-
-//export type SettingsScreenNavigationProp = CompositeScreenProps<
-//    NativeStackScreenProps<ProfileScreenDrawerParamList,'Settings'>,
-//    NativeStackScreenProps<RootStackParamList>
-//    >;
-
-//export type TermsScreenNavigationProp = CompositeScreenProps<
-//    NativeStackScreenProps<ProfileScreenDrawerParamList,'Terms'>,
-//    NativeStackScreenProps<RootStackParamList>
-//    >;  
-
-//export type LogoutScreenNavigationProp = CompositeScreenProps<
-//NativeStackScreenProps<ProfileScreenDrawerParamList,'Logout'>,
-//NativeStackScreenProps<RootStackParamList>
-//    >; 
-
-
-//? ======================Drawer Test Stage ======================
 

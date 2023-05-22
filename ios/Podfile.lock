@@ -334,6 +334,8 @@ PODS:
   - React-jsinspector (0.71.7)
   - React-logger (0.71.7):
     - glog
+  - react-native-aes (2.0.0):
+    - React-Core
   - react-native-safe-area-context (4.5.2):
     - RCT-Folly
     - RCTRequired
@@ -508,6 +510,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-aes (from `../node_modules/react-native-aes-crypto`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -597,6 +600,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-aes:
+    :path: "../node_modules/react-native-aes-crypto"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
@@ -688,6 +693,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: e722e6f755992c2c33ff8a4eb6833e5a55cd8296
   React-jsinspector: 9885f6f94d231b95a739ef7bb50536fb87ce7539
   React-logger: 3f8ebad1be1bf3299d1ab6d7f971802d7395c7ef
+  react-native-aes: c75c46aa744bef7c2415fdf7f5b2dcb75ca4364d
   react-native-safe-area-context: 1d596539b05a78f2b346e954e7c577f6f9be7544
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   React-perflogger: 2d505bbe298e3b7bacdd9e542b15535be07220f6

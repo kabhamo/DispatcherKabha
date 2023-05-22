@@ -19,9 +19,9 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
     return (
         <DrawerContentScrollView {...props}>
             {/* SafeView */}
-            <DrawerItemList {...props} />
+            {/*<DrawerItemList {...props} />*/}
             <DrawerItem icon={() => { return <Icon color={'red'} size={12} name={'heart'} /> }}
-                label="Sources" onPress={() => <TestDrawer />} />
+                label="HomeScreen" onPress={() => console.log("asd")} />
         </DrawerContentScrollView>
     );
 }
@@ -33,8 +33,9 @@ function AppDrawer(): JSX.Element {
             screenOptions={{ headerShown: false, drawerPosition: 'right' }}
             drawerContent={(props) => <CustomDrawerContent {...props} />}
         >
-            <Drawer.Screen name="SearchIn" options={{ title: "Search", }} component={AppTabs} />
+            <Drawer.Screen name="SearchIn" options={{ title: "Home", }} component={AppTabs} />
             <Drawer.Screen name="Sources" component={TestDrawer} />
+            {/* Inner Drawer */}
             <Drawer.Screen name="Language" component={TestDrawer} />
             <Drawer.Screen name="Dates" component={TestDrawer} />
         </Drawer.Navigator>

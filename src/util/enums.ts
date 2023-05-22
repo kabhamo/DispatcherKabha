@@ -6,7 +6,9 @@ export enum PasswordEnum {
 export enum ErrorFirebaseAuthEnum { 
     InvalidEmail = "auth/invalid-email",
     EmailExist = "auth/email-already-in-use",
+    UserNotFound = "auth/user-not-found",
     InvalidOperation = "auth/operation-not-allowed",
+    RequestsExceeded = "auth/too-many-requests",
     NetworkError = "auth/network-request-failed",
     UnmatchedPassword = "local/unmatched-passwords",
     WeakPassword = "auth/weak-password",
@@ -16,4 +18,11 @@ export enum ErrorFirebaseAuthEnum {
 export enum AsyncLocalStorageKeysType { 
     UserAuthKey = "@userAuthKey",
     OnBoardingKey = "@isOnBoarding"
+}
+//'idle' | 'pending' | 'succeeded' | 'failed';
+export enum LoadingStatus { 
+    Idle = 'Idle',
+    Pending = 'Pending',
+    Succeeded = 'Succeeded',
+    Failed = 'Failed'
 }

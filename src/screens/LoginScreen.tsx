@@ -27,9 +27,15 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
   const user = useAppSelector(state => state.user.value)
   //todo add another dispatcher for the onBoarding, maybe there is no need
 
-  const loginHandler = () => {
-    dispatch(fetchUserCredential({ email, password }))
-    navigation.navigate('OnBoarding');
+  const loginHandler = async () => {
+    try {
+      const result = await dispatch(fetchUserCredential({ email, password })).unwrap()
+      console.log("result at loginHandler ", result)
+      navigation.navigate('OnBoarding');
+
+    } catch (ex) {
+      console.log("Error at loginHandler ", ex)
+    }
   }
 
   return (

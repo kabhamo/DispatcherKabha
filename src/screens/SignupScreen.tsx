@@ -15,7 +15,7 @@ import { EmailInputComponent } from '../components/EmailInputComponent';
 import auth from '@react-native-firebase/auth';
 import { ErrorType } from '../util/types';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { updateUserAction } from '../state/user/userSlice';
+//import { updateUserAction } from '../state/user/userSlice';
 import { storeData } from '../services/asyncStorage';
 
 const { height, width } = Dimensions.get('screen')
@@ -46,7 +46,7 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
               isLoggedIn: true
             }
           }
-          dispatch(updateUserAction(payloadAction))
+          //dispatch(updateUserAction(payloadAction))
         }
         setError(null)
       })
@@ -57,9 +57,9 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
       })
   }
 
-  useEffect(() => {
-    console.log("signin - userState from redux store: ", user)
-  }, [user])
+  //useEffect(() => {
+  //  console.log("signin - userState from redux store: ", user)
+  //}, [user])
 
   //!toDelete
   const openOnBoarding = async () => {

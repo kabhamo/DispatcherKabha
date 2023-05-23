@@ -88,19 +88,17 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending || user.loading === LoadingStatus.Succeeded ?
+        {user.loading === LoadingStatus.Pending ?
           <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>
             <DispatcherButton
-              type='login'
               title="LOGIN"
               backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
               textColorStyleType={{ color: colors.white }}
               onPress={() => loginHandler()} />
 
             <DispatcherButton
-              type='signup'
               title="SIGNUP"
               backgroundColorStyleType={{ backgroundColor: colors.gray }}
               textColorStyleType={{ color: colors.primaryBlackTwo }}

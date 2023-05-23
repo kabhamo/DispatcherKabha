@@ -94,18 +94,16 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
       </View>
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending || user.loading === LoadingStatus.Succeeded ?
+        {user.loading === LoadingStatus.Pending ?
           <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>
             <DispatcherButton
-              type='signup'
               title="SIGNUP"
               backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
               textColorStyleType={{ color: colors.white }}
               onPress={() => signinHandler()} />
             <DispatcherButton
-              type='login'
               title="LOGIN"
               backgroundColorStyleType={{ backgroundColor: colors.gray }}
               textColorStyleType={{ color: colors.primaryBlackTwo }}

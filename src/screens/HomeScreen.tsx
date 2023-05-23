@@ -5,6 +5,7 @@ import { DispatcherBar } from '../components/DispatcherBar';
 import { DispatcherFilterBar } from '../components/DispatcherFilterBar';
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { colors } from '../util/colors';
+import { ARTICLE } from '../util/constants';
 
 
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
@@ -24,7 +25,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
       <View style={styles.articleContainer}>
         <Text>Last Login</Text>
         <Text>Top Headlines in UK</Text>
-        <DispatcherArticleCard />
+        <DispatcherArticleCard data={ARTICLE} />
       </View>
     </SafeAreaView>
 

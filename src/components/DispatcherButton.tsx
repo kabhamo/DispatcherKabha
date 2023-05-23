@@ -5,7 +5,6 @@ import { colors } from '../util/colors'
 type Props = {
     title: string,
     onPress?: ((event: GestureResponderEvent) => void) | undefined,
-    type: 'signup' | 'login',
     backgroundColorStyleType: { backgroundColor: string },
     textColorStyleType: { color: string }
 }

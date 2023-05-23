@@ -18,7 +18,7 @@ export type ArticleResponse = {
     title: string | null,
     description: string | null,
     url: string | null,
-    urlToImage: string | null,
+    urlToImage: string | undefined,
     publishedAt: string | null,
     content: string | null
 }

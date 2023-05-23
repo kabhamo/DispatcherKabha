@@ -29,7 +29,7 @@ function DispatcherApp(): JSX.Element {
         async function onBoarding() {
             try {
                 const appData = await getData(AsyncLocalStorageKeysType.OnBoardingKey);
-                if (appData == null) {
+                if (appData) {
                     setIsOnBoarding(true);
                     storeData(AsyncLocalStorageKeysType.OnBoardingKey, false);
                 } else {
@@ -43,12 +43,12 @@ function DispatcherApp(): JSX.Element {
         onBoarding();
     }, [isOnBoarding])
 
-
+    1
     return (
         <View style={{ flex: 1 }}>
             <NavigationContainer>
                 <RootStack.Navigator
-                    initialRouteName='Auth'//{isOnBoarding ? "OnBoarding" : "Auth"}
+                    initialRouteName='Drawer'//{isOnBoarding ? "OnBoarding" : "Auth"}
                     screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.white } }}>
                     <RootStack.Screen name="Auth" component={AuthStack} />
                     <RootStack.Screen name="Drawer" component={AppDrawer} />

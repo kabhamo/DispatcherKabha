@@ -1,9 +1,9 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Feather';
-import { colors } from '../util/colors'
-import { ErrorFirebaseAuthEnum, PasswordEnum } from '../util/enums';
-import { ErrorType } from '../util/types';
+import { colors } from '../../util/colors'
+import { ErrorFirebaseAuthEnum, PasswordEnum } from '../../util/enums';
+import { ErrorType } from '../../util/types';
 
 type Props = {
     placeholder: string,

@@ -28,3 +28,9 @@ export type UserCredential = {
     token: string,
     isLoggedIn: boolean
 }
+
+export type ProfileTab = {
+    id: number,
+    name: string,
+    icon: JSX.Element
+}

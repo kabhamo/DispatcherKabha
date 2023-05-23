@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import { AppBar, HStack, IconButton } from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/Feather';
-import { colors } from '../util/colors';
+import { colors } from '../../util/colors';
 
 type DispatcherBarProps = {
 
@@ -15,7 +15,7 @@ export const DispatcherBar: React.FC<DispatcherBarProps> = ({ }) => {
                 <View>
                     <Image
                         style={{ width: 45, height: 45, marginBottom: 10, marginLeft: 10 }}
-                        source={require('../assets/ios/LOGO.png')}
+                        source={require('../../assets/ios/LOGO.png')}
                     />
                 </View>
             )}

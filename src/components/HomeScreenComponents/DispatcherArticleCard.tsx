@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Platform, StyleSheet, Text, View } from 'react-native';
-import { colors } from '../util/colors';
-import { ARTICLE } from '../util/constants';
-import { ArticleResponse } from '../util/types';
+import { colors } from '../../util/colors';
+import { ARTICLE } from '../../util/constants';
+import { ArticleResponse } from '../../util/types';
 import { DispatcherArticalButton } from './DispatcherArticalButton';
 
 type DispatcherArticleCardProps = {

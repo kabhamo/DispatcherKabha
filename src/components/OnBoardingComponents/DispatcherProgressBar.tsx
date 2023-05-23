@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { View } from "react-native";
-import { colors } from "../util/colors";
+import { colors } from "../../util/colors";
 import { Bar, BarPropTypes } from 'react-native-progress';
 import Animated from "react-native-reanimated";
 

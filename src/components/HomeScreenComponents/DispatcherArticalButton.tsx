@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Platform, TouchableOpacity, GestureResponderEvent } from 'react-native'
 import React from 'react'
-import { colors } from '../util/colors';
+import { colors } from '../../util/colors';
 import Icon from 'react-native-vector-icons/Feather'
 
 type DispatcherArticalButtonProps = {

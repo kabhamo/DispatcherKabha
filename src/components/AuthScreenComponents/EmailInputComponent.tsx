@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, TextInput, Platform } from 'react-native'
 import React from 'react'
-import { colors } from '../util/colors'
-import { ErrorFirebaseAuthEnum } from '../util/enums'
-import { ErrorType } from '../util/types'
+import { colors } from '../../util/colors'
+import { ErrorFirebaseAuthEnum } from '../../util/enums'
+import { ErrorType } from '../../util/types'
 
 type EmailInputComponentProps = {
     placeholder: string,

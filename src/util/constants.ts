@@ -30,6 +30,7 @@ export const PAGES: PageInterface[] = [
   },
 ];
 
+//! Testing - To delete
 export const ARTICLE: ArticleResponse = {
   "source": {
       "id": null,

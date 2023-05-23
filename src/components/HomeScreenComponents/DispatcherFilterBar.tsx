@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { AppBar, HStack, IconButton } from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/Feather';
-import { colors } from '../util/colors';
+import { colors } from '../../util/colors';
 
 type DispatcherFilterBarProps = {
     setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>

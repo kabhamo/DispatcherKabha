@@ -41,7 +41,7 @@ export type DrawerParamList = {
 
 export type BottomTabsParamList = {
     Home: undefined;
-    ProfileTab: undefined;
+    Profile: undefined;
     Favorite: undefined;
 }
 
@@ -53,7 +53,7 @@ export type HomeScreenNavigationProp = CompositeScreenProps<
     >>;
 
 export type ProfileScreenNavigationProp = CompositeScreenProps<
-    BottomTabScreenProps<BottomTabsParamList,'ProfileTab'>,
+    BottomTabScreenProps<BottomTabsParamList,'Profile'>,
     NativeStackScreenProps<RootStackParamList>
     >;  
 

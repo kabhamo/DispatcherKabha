@@ -3,7 +3,6 @@ import React from 'react';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem, DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer';
 import AppTabs from './AppTabs';
 import { DrawerParamList } from './types/navigationTypes';
-//import Icon from 'react-native-vector-icons/Icon';
 import Icon from 'react-native-vector-icons/Feather';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();

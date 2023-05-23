@@ -40,6 +40,7 @@ export const DispatcherFilterBar: React.FC<DispatcherFilterBarProps> = ({ setOpe
 
 const styles = StyleSheet.create({
     InnerFilterBarContainer: {
+        flex: 1,
         backgroundColor: colors.grayWhite,
         height: '40%',
         justifyContent: 'center'

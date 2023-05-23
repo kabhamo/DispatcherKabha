@@ -3,7 +3,7 @@ import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../util/colors';
 import { ARTICLE } from '../../util/constants';
 import { ArticleResponse } from '../../util/types';
-import { DispatcherArticalButton } from './DispatcherArticalButton';
+import { DispatcherArticleButton } from './DispatcherArticleButton';
 
 type DispatcherArticleCardProps = {
     data: ArticleResponse
@@ -36,7 +36,7 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
                     <Text style={styles.contentText}>{data.content}</Text>
                 </View>
                 <View style={[styles.btnContainer]}>
-                    <DispatcherArticalButton
+                    <DispatcherArticleButton
                         title='NAVIGATE TO DISPATCH'
                         onPress={() => console.log("NAVIGATE")} />
                 </View>

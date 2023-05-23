@@ -39,7 +39,6 @@ export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigatio
             <View style={styles.profileContainer}>
                 <ProfileAppBar />
             </View>
-            <View style={styles.lineBar}></View>
             <View style={styles.tabsContainer}>
                 <ScrollView>
                     {
@@ -66,16 +65,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: colors.primaryBlack
     },
-    lineBar: {
-        height: '0.5%',
-        backgroundColor: colors.gray,
-    },
     profileContainer: {
         flex: 1,
     },
     tabsContainer: {
         flex: 8,
-        backgroundColor: colors.grayWhite,
+        backgroundColor: colors.gray,
     },
     tabsView: {
         height: '25%',

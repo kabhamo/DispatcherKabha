@@ -25,16 +25,40 @@ function AppTabs(): JSX.Element {
             <Tab.Screen
                 name="Profile"
                 component={ProfileScreen}
-                options={{ tabBarIcon: (e) => (<Icon name="settings" size={28} color={e.focused ? colors.white : colors.grayDark} />) }} />
+                options={{
+                    tabBarIcon: (e) => (
+                        <Icon
+                            name="settings"
+                            size={28}
+                            color={e.focused ? colors.white : colors.grayDark}
+                        />
+                    )
+                }} />
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
-                options={{ tabBarIcon: (e) => (<Icon name="home" size={28} color={e.focused ? colors.white : colors.grayDark} />) }}
+                options={{
+                    tabBarIcon: (e) => (
+                        <Icon
+                            name="home"
+                            size={28}
+                            color={e.focused ? colors.white : colors.grayDark}
+                        />
+                    )
+                }}
             />
             <Tab.Screen
                 name="Favorite"
                 component={FavoriteScreen}
-                options={{ tabBarIcon: (e) => (<Icon name="star" size={28} color={e.focused ? colors.white : colors.grayDark} />) }}
+                options={{
+                    tabBarIcon: (e) => (
+                        <Icon
+                            name="star"
+                            size={28}
+                            color={e.focused ? colors.white : colors.grayDark}
+                        />
+                    )
+                }}
             />
         </Tab.Navigator>
     );

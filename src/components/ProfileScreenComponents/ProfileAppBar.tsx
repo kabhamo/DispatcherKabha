@@ -13,14 +13,19 @@ export const ProfileAppBar: React.FC<ProfileAppBarProps> = ({ }) => {
     return (
         <AppBar style={styles.InnerBarContainer}
             leading={(props) => (
-                <HStack style={{ flex: 1, flexDirection: 'column', rowGap: 8 }}>
-                    <Text style={styles.titleText}>Hi User</Text>
-                    <Text style={styles.editText}>Edit my profile btn</Text>
+                <HStack >
+                    <TouchableOpacity
+                        style={styles.btnTextContainer}
+                        onPress={() => console.log("Edit my profile")}
+                    >
+                        <Text style={styles.titleText}>Hi User</Text>
+                        <Text style={styles.editText}>Edit my profile</Text>
+                    </TouchableOpacity>
                 </HStack>
             )}
             trailing={props => (
                 <TouchableOpacity
-                    onPress={() => console.log("Avatar")}>
+                    onPress={() => console.log("Change Avatar Image")}>
                     <Avatar
                         color={colors.gray}
                         size={60}
@@ -42,6 +47,12 @@ const styles = StyleSheet.create({
         padding: 10,
         justifyContent: 'center',
         backgroundColor: colors.white,
+    },
+    btnTextContainer: {
+        height: '100%',
+        marginBottom: '20%',
+        justifyContent: "center",
+        gap: 8,
     },
     titleText: {
         fontSize: 25,

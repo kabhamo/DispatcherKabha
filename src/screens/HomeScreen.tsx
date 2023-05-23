@@ -8,6 +8,8 @@ import { colors } from '../util/colors';
 import { ARTICLE } from '../util/constants';
 
 //todo Add Carousel to the artical section to render the articales
+//todo Add the star(Favorite) logic and styles
+
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 

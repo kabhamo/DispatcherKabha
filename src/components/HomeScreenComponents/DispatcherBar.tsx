@@ -7,6 +7,7 @@ import { colors } from '../../util/colors';
 type DispatcherBarProps = {
 
 }
+//todo change the image logo to svg and use fastImage pkg
 export const DispatcherBar: React.FC<DispatcherBarProps> = ({ }) => {
     return (
         <AppBar
@@ -37,6 +38,7 @@ export const DispatcherBar: React.FC<DispatcherBarProps> = ({ }) => {
 
 const styles = StyleSheet.create({
     InnerBarContainer: {
+        flex: 1,
         backgroundColor: colors.primaryBlack,
         height: '60%',
         justifyContent: 'center'

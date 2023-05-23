@@ -7,7 +7,7 @@ type DispatcherArticalButtonProps = {
     title: string,
     onPress?: ((event: GestureResponderEvent) => void) | undefined,
 }
-export const DispatcherArticalButton: React.FC<DispatcherArticalButtonProps> = ({ title, onPress }) => {
+export const DispatcherArticleButton: React.FC<DispatcherArticalButtonProps> = ({ title, onPress }) => {
     return (
         <TouchableOpacity
             style={[styles.btn]}

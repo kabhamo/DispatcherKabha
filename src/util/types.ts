@@ -26,7 +26,8 @@ export type ArticleResponse = {
 export type UserCredential = {
     email: string,
     token: string,
-    isLoggedIn: boolean
+    isLoggedIn: boolean,
+    lastLogin: string
 }
 
 export type ProfileTab = {

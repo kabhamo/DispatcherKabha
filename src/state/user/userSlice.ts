@@ -29,7 +29,8 @@ const initialState: UserState = {
     value: {
         email: "",
         token:"",
-        isLoggedIn: false
+        isLoggedIn: false,
+        lastLogin: ""
     },
     loading: LoadingStatus.Idle,
     error: {

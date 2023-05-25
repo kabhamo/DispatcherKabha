@@ -5,11 +5,12 @@ import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar'
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { colors } from '../util/colors';
-import { ARTICLE } from '../util/constants';
+import { ARTICLES } from '../util/constants';
+import Carousel from 'react-native-reanimated-carousel';
 
 //todo Add Carousel to the artical section to render the articles
 //todo Add the star(Favorite) logic and styles
-
+const { width, height } = Dimensions.get('screen')
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
@@ -29,13 +30,34 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
       <View style={styles.articleContainer}>
         <Text>Last Login</Text>
         <Text>Top Headlines in UK</Text>
-        <DispatcherArticleCard data={ARTICLE} />
+        {/*<DispatcherArticleCard data={ARTICLE} />*/}
+
+
+        <Carousel
+          vertical
+          autoFillData
+          overscrollEnabled
+          loop={false}
+          width={width}
+          height={height * 0.6}
+          data={ARTICLES}
+          scrollAnimationDuration={1000}
+          onSnapToItem={(index) => console.log('current index:', index)}
+          onScrollEnd={(index) => console.log('scroll end', index)}
+          renderItem={({ index }) => (
+            <DispatcherArticleCard data={ARTICLES[index]} />
+          )}
+        />
       </View>
 
     </SafeAreaView>
 
   );
 }
+
+//ARTICLES.map((article, index) => (
+//  <DispatcherArticleCard data={article} />
+//))
 
 const styles = StyleSheet.create({
   mainContainer: {

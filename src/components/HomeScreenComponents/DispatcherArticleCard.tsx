@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../util/colors';
-import { ARTICLE } from '../../util/constants';
 import { ArticleResponse } from '../../util/types';
 import { DispatcherArticleButton } from './DispatcherArticleButton';
 
@@ -12,8 +11,8 @@ type DispatcherArticleCardProps = {
 export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data }) => {
     const [date, setDate] = useState<Date>(new Date())
     useEffect(() => {
-        if (ARTICLE.publishedAt) {
-            setDate(new Date(ARTICLE.publishedAt))
+        if (data.publishedAt) {
+            setDate(new Date(data.publishedAt))
             console.log(date.toUTCString())
         }
     }, [])

@@ -42,13 +42,12 @@ target 'DispatcherKabha' do
 
   # Flags change depending on the env values.
   flags = get_default_flags()
-
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
     # Upcoming versions of React Native may rely on get_default_flags(), but
     # we make it explicit here to aid in the React Native upgrade process.
-    :hermes_enabled => false,
+    #:hermes_enabled => false,
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
     #
@@ -63,7 +62,7 @@ target 'DispatcherKabha' do
     inherit! :complete
     # Pods for testing
   end
-
+  
   post_install do |installer|
     react_native_post_install(
       installer,
@@ -74,4 +73,6 @@ target 'DispatcherKabha' do
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
     __apply_Xcode_14_3_RC_post_install_workaround(installer)
   end
+  
+  
 end

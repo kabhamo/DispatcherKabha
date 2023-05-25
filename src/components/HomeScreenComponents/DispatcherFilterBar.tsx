@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { AppBar, HStack, IconButton } from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/Feather';
-import { colors } from '../util/colors';
+import { colors } from '../../util/colors';
 
 type DispatcherFilterBarProps = {
     setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>
@@ -40,9 +40,11 @@ export const DispatcherFilterBar: React.FC<DispatcherFilterBarProps> = ({ setOpe
 
 const styles = StyleSheet.create({
     InnerFilterBarContainer: {
+        flex: 1,
         backgroundColor: colors.grayWhite,
         height: '40%',
-        justifyContent: 'center'
-
+        justifyContent: 'center',
+        borderBottomWidth: 2,
+        borderColor: colors.gray
     }
 })

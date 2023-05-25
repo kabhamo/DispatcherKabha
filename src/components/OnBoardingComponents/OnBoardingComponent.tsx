@@ -1,8 +1,8 @@
 import React from 'react'
 import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native'
 import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
-import { colors } from '../util/colors'
-import { PageInterface } from '../util/constants'
+import { colors } from '../../util/colors'
+import { PageInterface } from '../../util/constants'
 
 type OnBoardingComponentProps = {
     page: PageInterface,

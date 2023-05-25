@@ -1,9 +1,9 @@
 import Lottie from 'lottie-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
-import DispatcherButton from '../components/DispatcherButton';
-import { EmailInputComponent } from '../components/EmailInputComponent';
-import { PasswordInputComponent } from '../components/PasswordInputComponent';
+import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
+import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
+import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
 import { fetchUserCredential } from '../state/user/userSlice';
@@ -88,19 +88,17 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending || user.loading === LoadingStatus.Succeeded ?
+        {user.loading === LoadingStatus.Pending ?
           <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>
             <DispatcherButton
-              type='login'
               title="LOGIN"
               backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
               textColorStyleType={{ color: colors.white }}
               onPress={() => loginHandler()} />
 
             <DispatcherButton
-              type='signup'
               title="SIGNUP"
               backgroundColorStyleType={{ backgroundColor: colors.gray }}
               textColorStyleType={{ color: colors.primaryBlackTwo }}

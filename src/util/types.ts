@@ -18,7 +18,7 @@ export type ArticleResponse = {
     title: string | null,
     description: string | null,
     url: string | null,
-    urlToImage: string | null,
+    urlToImage: string | undefined,
     publishedAt: string | null,
     content: string | null
 }
@@ -27,4 +27,15 @@ export type UserCredential = {
     email: string,
     token: string,
     isLoggedIn: boolean
+}
+
+export type ProfileTab = {
+    id: number,
+    name: string,
+    icon: JSX.Element
+}
+
+export type FavoriteArticles = {
+    title: string,
+    imageUrl: string
 }

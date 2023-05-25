@@ -1,42 +1,46 @@
+import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
   Platform,
   StyleSheet,
-  Text,
-  TextInput, View
+  Text, View
 } from 'react-native';
-import DispatcherButton from '../components/DispatcherButton';
+import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
+import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
+import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { SignupScreenNavigationProp } from '../routes/types/navigationTypes';
+import { fetchUserCredential } from '../state/user/userSlice';
 import { colors } from '../util/colors';
-import { PasswordComponent } from '../components/PasswordComponent';
-import { AuthNavProps } from '../routes/paramsList/AuthParamList';
-import { PasswordEnum } from '../util/enums';
-import { firebaseSignin } from '../services/firebaseAuth';
-
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
+import { SerializedError } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
-const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: AuthNavProps<'Signup'>) => {
+const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route }: SignupScreenNavigationProp) => {
   const [visibility, setVisibility] = useState<boolean>(true);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [rePassword, setRePassword] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
+  const [error, setError] = useState<SerializedError | null>(null);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user)
+
+  useEffect(() => {
+    console.log("useEffect:", user.error)
+    if (user.error.code || user.error.message) {
+      setError(user.error)
+    }
+  }, [user])
 
   const signinHandler = async () => {
     try {
-      if (email && rePassword && password === rePassword) {
-        //? save to redux
-        const userCredential = await firebaseSignin(email, password)
-        console.log("userCredential: ", userCredential)
-      } else {
-        //!Error state
-        console.log("check email and passwords")
-      }
+      await dispatch(fetchUserCredential({ email, password, rePassword })).unwrap()
+      navigation.navigate('OnBoarding');
     } catch (ex) {
-      //!Error state
-      console.log(`Error while signing in ${ex}`)
+      console.log("Error at signinHandler ", ex)
     }
   }
 
@@ -52,50 +56,60 @@ const SignupScreen: React.FC<AuthNavProps<'Signup'>> = ({ navigation, route }: A
           source={require('../assets/LoginImage.png')}
         />
         <Text style={styles.text}> Signup </Text>
+
+
       </View>
 
       <View style={styles.inputsContainer} >
-        <TextInput
-          style={styles.inputText}
-          autoCapitalize="none"
-          placeholderTextColor="#5A5A89"
+        <EmailInputComponent
           placeholder='Your email'
-          onChangeText={(input) => setEmail(input)}
+          error={error}
+          setEmail={setEmail}
         />
-
-        <PasswordComponent
-          placeholder='Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.Password}
           type={PasswordEnum.Password}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={setPassword}
           setRePassword={() => ""}
+          error={error}
         />
-        <PasswordComponent
-          placeholder='Re-Enter Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.ReinterPassword}
           type={PasswordEnum.ReinterPassword}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={() => ""}
           setRePassword={setRePassword}
+          error={error}
         />
-
         <View style={styles.line}></View>
+        {error &&
+          (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
+            error.code === ErrorFirebaseAuthEnum.NetworkError ||
+            error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
+          <Text style={styles.error}>{error.message}</Text> : null}
+
       </View>
 
       <View style={styles.btnsContainer}>
-        <DispatcherButton
-          type='signup'
-          title="SIGNUP"
-          backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
-          textColorStyleType={{ color: colors.white }}
-          onPress={() => signinHandler()} />
-        <DispatcherButton
-          type='login'
-          title="LOGIN"
-          backgroundColorStyleType={{ backgroundColor: colors.gray }}
-          textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => navigation.navigate('Login')} />
+        {user.loading === LoadingStatus.Pending ?
+          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+          :
+          <>
+            <DispatcherButton
+              title="SIGNUP"
+              backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
+              textColorStyleType={{ color: colors.white }}
+              onPress={() => signinHandler()} />
+            <DispatcherButton
+              title="LOGIN"
+              backgroundColorStyleType={{ backgroundColor: colors.gray }}
+              textColorStyleType={{ color: colors.primaryBlackTwo }}
+              onPress={() => navigation.navigate('Auth', { screen: 'Login' })} />
+          </>
+        }
       </View>
 
     </View>
@@ -107,23 +121,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputsContainer: {
-    flex: 7,
+    flex: 8,
     justifyContent: 'center',
     alignItems: "center",
-    gap: 20,
-    //backgroundColor: 'darkorange',
+    gap: 15,
   },
   btnsContainer: {
     flex: 3,
     alignItems: "center",
     justifyContent: 'center',
     gap: 20,
-    //backgroundColor: 'green',
   },
   imageContainer: {
     flex: 5,
     alignItems: 'flex-start',
-    gap: 15,
+    gap: 10,
   },
   topImage: {
     width: '100%',
@@ -133,20 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     width: 0.88 * width,
     height: 2,
-    marginTop: '10%',
-  },
-  inputText: {
-    fontSize: 20,
-    width: "88%",
-    borderWidth: 2,
-    borderRadius: 4,
-    paddingVertical: 11,
-    paddingLeft: 16,
-    backgroundColor: "#FFFFFF",
-    borderColor: colors.gray,
-    color: colors.primaryBlackTwo,
-    fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
-    fontWeight: '400',
+    marginTop: '5%',
   },
   text: {
     marginLeft: 20,
@@ -156,6 +155,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.primaryBlackTwo
   },
+  error: {
+    textAlign: 'center',
+    color: colors.error,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+    paddingLeft: 2,
+    marginTop: -10
+  }
 });
 
 export default SignupScreen

@@ -1,36 +1,52 @@
-import { View, Text, Image, StyleSheet, TextInput, Platform } from 'react-native'
-import React, { useState } from 'react'
-import DispatcherButton from '../components/DispatcherButton'
-import { Dimensions } from 'react-native'
-import { colors } from '../util/colors'
-import { PasswordComponent } from '../components/PasswordComponent'
-import { AuthNavProps } from '../routes/paramsList/AuthParamList'
-import { PasswordEnum } from '../util/enums'
-import { firebaseLogin } from '../services/firebaseAuth'
+import Lottie from 'lottie-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
+import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
+import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
+import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
+import { fetchUserCredential } from '../state/user/userSlice';
+import { colors } from '../util/colors';
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
+import { SerializedError } from '../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
-const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: AuthNavProps<'Login'>) => {
+const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }: LoginScreenNavigationProp) => {
+
   const [visibility, setVisibility] = useState<boolean>(true);
-  const [email, setEmail] = useState<string | null>(null);
-  const [password, setPassword] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<SerializedError | null>(null);
+  //? ============Redux============
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user)
+
+  const animationRef = useRef<Lottie>(null)
+  //todo add another dispatcher for the onBoarding, maybe there is no need
+
+  useEffect(() => {
+    animationRef.current?.play()
+    // Or set a specific startFrame and endFrame with:
+    animationRef.current?.play(30, 120);
+  }, [])
+
+  useEffect(() => {
+    console.log(user.loading)
+    if (user.error.code || user.error.message) {
+      setError(user.error)
+    }
+  }, [user])
 
   const loginHandler = async () => {
     try {
-      if (email && password) {
-        const userCredential = await firebaseLogin(email, password);
-        console.log("Login userCredential: ", userCredential)
-      } else {
-        //!Error state
-        console.log("check email and password")
-      }
+      await dispatch(fetchUserCredential({ email, password })).unwrap()
+      navigation.navigate('OnBoarding');
     } catch (ex) {
-      //!Error state
-      console.log(`Error while signing in ${ex}`)
+      console.log("Error at loginHandler ", ex)
     }
   }
-
 
   return (
     <View style={styles.container}>
@@ -46,39 +62,53 @@ const LoginScreen: React.FC<AuthNavProps<'Login'>> = ({ navigation, route }: Aut
       </View>
 
       <View style={styles.inputsContainer} >
-        <TextInput
-          style={styles.inputText}
-          autoCapitalize="none"
-          placeholderTextColor="#5A5A89"
+        <EmailInputComponent
           placeholder='Your email'
-          onChangeText={(input) => setEmail(input)}
+          error={error}
+          setEmail={setEmail}
         />
-        <PasswordComponent
-          placeholder='Password'
+        <PasswordInputComponent
+          placeholder={PasswordEnum.Password}
           type={PasswordEnum.Password}
           visibility={visibility}
           setVisibility={setVisibility}
           setPassword={setPassword}
           setRePassword={() => ""}
+          error={error}
         />
 
         <View style={styles.line}></View>
+        {error &&
+          (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
+            error.code === ErrorFirebaseAuthEnum.NetworkError ||
+            error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
+          <Text style={styles.error}>{error.message}</Text> : null}
       </View>
 
+
+
       <View style={styles.btnsContainer}>
-        <DispatcherButton
-          type='login'
-          title="LOGIN"
-          backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
-          textColorStyleType={{ color: colors.white }}
-          onPress={() => loginHandler()} />
-        <DispatcherButton
-          type='signup'
-          title="SIGNUP"
-          backgroundColorStyleType={{ backgroundColor: colors.gray }}
-          textColorStyleType={{ color: colors.primaryBlackTwo }}
-          onPress={() => navigation.navigate('Signup')} />
+        {user.loading === LoadingStatus.Pending ?
+          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+          :
+          <>
+            <DispatcherButton
+              title="LOGIN"
+              backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
+              textColorStyleType={{ color: colors.white }}
+              onPress={() => loginHandler()} />
+
+            <DispatcherButton
+              title="SIGNUP"
+              backgroundColorStyleType={{ backgroundColor: colors.gray }}
+              textColorStyleType={{ color: colors.primaryBlackTwo }}
+              onPress={() => navigation.navigate('Auth', { screen: 'Signup' })} />
+          </>
+        }
+
       </View>
+
+
 
     </View>
   )
@@ -89,7 +119,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputsContainer: {
-    flex: 5,
+    flex: 6,
     justifyContent: 'center',
     alignItems: "center",
     gap: 20,
@@ -105,7 +135,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     flex: 5,
     alignItems: 'flex-start',
-    gap: 15,
+    gap: 12,
   },
   topImage: {
     width: '100%',
@@ -115,20 +145,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     width: 0.88 * width,
     height: 2,
-    marginTop: '10%',
-  },
-  inputText: {
-    fontSize: 20,
-    width: "88%",
-    borderWidth: 2,
-    borderRadius: 4,
-    paddingVertical: 11,
-    paddingLeft: 16,
-    backgroundColor: "#FFFFFF",
-    borderColor: colors.gray,
-    color: colors.primaryBlackTwo,
-    fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
-    fontWeight: '400',
+    marginTop: '5%',
   },
   text: {
     marginLeft: 20,
@@ -138,6 +155,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: colors.primaryBlackTwo
   },
+  error: {
+    textAlign: 'center',
+    color: colors.error,
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 18,
+    paddingLeft: 2,
+    marginTop: -10
+  }
 });
 
 export default LoginScreen

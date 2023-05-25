@@ -1,12 +1,15 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import { AuthStack } from './src/routes/AuthStack';
-import { AppTabs } from './src/routes/AppTabs';
-
-
+import { Provider } from 'react-redux'
+import { store } from './src/state/store';
+import DispatcherApp from './src/DispatcherApp';
+import { NavigationContainer } from '@react-navigation/native';
 
 function App(): JSX.Element {
   return (
-    <AuthStack />
+    <Provider store={store}>
+      <DispatcherApp />
+    </Provider>
   );
 }
 

@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, GestureResponderEvent, Platform, StyleProp, ViewStyle } from 'react-native'
 import React from 'react'
-import { colors } from '../util/colors'
+import { colors } from '../../util/colors'
 
 type Props = {
     title: string,
     onPress?: ((event: GestureResponderEvent) => void) | undefined,
-    type: 'signup' | 'login',
     backgroundColorStyleType: { backgroundColor: string },
     textColorStyleType: { color: string }
 }

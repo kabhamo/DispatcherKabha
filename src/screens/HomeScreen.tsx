@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { DispatcherArticleCard } from '../components/HomeScreenComponents/DispatcherArticleCard';
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
@@ -7,7 +7,7 @@ import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { colors } from '../util/colors';
 import { ARTICLE } from '../util/constants';
 
-//todo Add Carousel to the artical section to render the articales
+//todo Add Carousel to the artical section to render the articles
 //todo Add the star(Favorite) logic and styles
 
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
   },
   articleContainer: {
     flex: 5,
-    backgroundColor: colors.gray
+    backgroundColor: colors.white
   },
 })

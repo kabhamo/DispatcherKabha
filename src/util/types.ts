@@ -34,3 +34,8 @@ export type ProfileTab = {
     name: string,
     icon: JSX.Element
 }
+
+export type FavoriteArticles = {
+    title: string,
+    imageUrl: string
+}

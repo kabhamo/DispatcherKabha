@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.grayWhite,
         height: '40%',
-        justifyContent: 'center'
-
+        justifyContent: 'center',
+        borderBottomWidth: 2,
+        borderColor: colors.gray
     }
 })

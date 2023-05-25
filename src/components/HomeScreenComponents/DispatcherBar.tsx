@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import React from 'react'
 import { AppBar, HStack, IconButton } from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/Feather';
@@ -7,6 +7,8 @@ import { colors } from '../../util/colors';
 type DispatcherBarProps = {
 
 }
+const { width, height } = Dimensions.get('screen');
+
 //todo change the image logo to svg and use fastImage pkg
 export const DispatcherBar: React.FC<DispatcherBarProps> = ({ }) => {
     return (
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
     InnerBarContainer: {
         flex: 1,
         backgroundColor: colors.primaryBlack,
-        height: '60%',
         justifyContent: 'center'
     },
 })

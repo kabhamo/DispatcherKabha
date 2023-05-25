@@ -27,7 +27,7 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
 
             <View style={styles.dateTitleSourceContainer}>
                 <Text style={styles.smallText}>{date.toUTCString()}</Text>
-                <Text style={styles.titleText}>{data.title}</Text>
+                <Text adjustsFontSizeToFit numberOfLines={4} style={styles.titleText}>{data.title}</Text>
                 <Text style={styles.smallText}>{data.source.name}</Text>
             </View>
 
@@ -50,7 +50,9 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         margin: '5%',
-        backgroundColor: colors.white,
+        borderWidth: 1,
+        borderColor: colors.grayDark,
+        backgroundColor: colors.grayWhite,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
         borderTopLeftRadius: 20,
@@ -59,12 +61,15 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         flex: 4,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        borderTopLeftRadius: 19,
+        borderTopRightRadius: 19,
         backgroundColor: '#B799FF',
     },
     dateTitleSourceContainer: {
         flex: 3,
+        paddingTop: '2%',
+        paddingLeft: '2%',
+        rowGap: 5
     },
     contentBtnContainer: {
         flex: 5,
@@ -82,7 +87,6 @@ const styles = StyleSheet.create({
     },
     contentText: {
         color: colors.primaryBlackTwo,
-        padding: '2%',
         textAlign: 'justify',
         fontSize: 15,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
@@ -90,8 +94,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: colors.primaryBlack,
-        padding: '2%',
-        textAlign: 'justify',
+        textAlign: 'left',
         fontSize: 21,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: "600",
@@ -99,7 +102,6 @@ const styles = StyleSheet.create({
     smallText: {
         color: colors.primaryBlackThree,
         textAlign: 'justify',
-        paddingLeft: '2%',
         fontSize: 16,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: "500",

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
     tabsContainer: {
         flex: 8,
-        backgroundColor: colors.gray,
+        backgroundColor: colors.white,
     },
     tabsView: {
         height: '25%',

@@ -52,10 +52,5 @@ target 'DispatcherKabha' do
     inherit! :complete
     # Pods for testing
   end
-
-  #use_flipper!({ 'Flipper' => '0.189.0' }) # should match the version of your Flipper client app
-  #post_install do |installer|
-  #  flipper_post_install(installer)
-  #end
   
 end

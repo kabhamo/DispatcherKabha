@@ -6,7 +6,7 @@ import { DispatcherFilterBar } from '../components/HomeScreenComponents/Dispatch
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
-import Carousel from 'react-native-reanimated-carousel';
+import { FlashList } from "@shopify/flash-list";
 
 //todo Add Carousel to the artical section to render the articles
 //todo Add the star(Favorite) logic and styles
@@ -31,22 +31,10 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         <Text>Last Login</Text>
         <Text>Top Headlines in UK</Text>
         {/*<DispatcherArticleCard data={ARTICLE} />*/}
-
-
-        <Carousel
-          vertical
-          autoFillData
-          overscrollEnabled
-          loop={false}
-          width={width}
-          height={height * 0.6}
+        <FlashList
           data={ARTICLES}
-          scrollAnimationDuration={1000}
-          onSnapToItem={(index) => console.log('current index:', index)}
-          onScrollEnd={(index) => console.log('scroll end', index)}
-          renderItem={({ index }) => (
-            <DispatcherArticleCard data={ARTICLES[index]} />
-          )}
+          renderItem={({ item, index }) => <DispatcherArticleCard key={index} data={item} />}
+          estimatedItemSize={width * 0.7}
         />
       </View>
 

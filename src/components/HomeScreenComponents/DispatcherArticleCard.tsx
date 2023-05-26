@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { colors } from '../../util/colors';
-import { ARTICLE } from '../../util/constants';
 import { ArticleResponse } from '../../util/types';
 import { DispatcherArticleButton } from './DispatcherArticleButton';
 
@@ -9,12 +8,12 @@ type DispatcherArticleCardProps = {
     data: ArticleResponse
 }
 
+const { width, height } = Dimensions.get('screen')
 export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data }) => {
     const [date, setDate] = useState<Date>(new Date())
     useEffect(() => {
-        if (ARTICLE.publishedAt) {
-            setDate(new Date(ARTICLE.publishedAt))
-            console.log(date.toUTCString())
+        if (data.publishedAt) {
+            setDate(new Date(data.publishedAt))
         }
     }, [])
 
@@ -22,7 +21,7 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
         <View style={styles.mainContainer}>
 
             <View style={styles.imageContainer}>
-                <Image style={styles.imageContainer} source={{ uri: data.urlToImage }} />
+                <Image style={[styles.imageContainer, { height: height * 0.21 }]} source={{ uri: data.urlToImage }} />
             </View>
 
             <View style={styles.dateTitleSourceContainer}>
@@ -33,7 +32,7 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
 
             <View style={styles.contentBtnContainer}>
                 <View style={styles.contentTextContainer}>
-                    <Text style={styles.contentText}>{data.content}</Text>
+                    <Text allowFontScaling numberOfLines={5} style={styles.contentText}>{data.content}</Text>
                 </View>
                 <View style={[styles.btnContainer]}>
                     <DispatcherArticleButton
@@ -48,8 +47,9 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1,
+        //flex: 1,
         margin: '5%',
+        marginTop: 0,
         borderWidth: 1,
         borderColor: colors.grayDark,
         backgroundColor: colors.grayWhite,
@@ -57,38 +57,40 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 20,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-
     },
     imageContainer: {
-        flex: 4,
+        //flex: 4,
         borderTopLeftRadius: 19,
         borderTopRightRadius: 19,
         backgroundColor: '#B799FF',
     },
     dateTitleSourceContainer: {
-        flex: 3,
+        //flex: 3,
         paddingTop: '2%',
         paddingLeft: '2%',
         rowGap: 5
     },
     contentBtnContainer: {
-        flex: 5,
+        //flex: 5,
+        rowGap: 20,
+        paddingVertical: '5%',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
     btnContainer: {
-        flex: 2,
+        //flex: 2,
         justifyContent: 'center',
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
     contentTextContainer: {
-        flex: 6,
+        //flex: 6,
+        paddingLeft: '2%',
     },
     contentText: {
-        color: colors.primaryBlackTwo,
-        textAlign: 'justify',
         fontSize: 15,
+        textAlign: 'left',
+        color: colors.primaryBlackTwo,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: "500",
     },

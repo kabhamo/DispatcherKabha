@@ -13,19 +13,20 @@ import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
 import { FavoriteArticle } from "../util/types";
 
-//todo Add the star(Favorite) logic and styles
 const { width, height } = Dimensions.get('screen')
+
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
-  //const [isFavoriteArticle, setFavoriteArticle] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
   const dispatch = useAppDispatch();
 
+  //close and open the drawer menu
   useEffect(() => {
     openDrawer && navigation.openDrawer();
     return () => setOpenDrawer(false);
   }, [openDrawer]);
 
+  //fetch last login state from asyncStorage
   useEffect(() => {
     const getDateTime = async () => {
       const result = await getData(AsyncLocalStorageKeysType.UserAuthKey);
@@ -34,10 +35,10 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
     getDateTime()
   }, [])
 
+  //depend on the icon state fetch favoriteArticle or remove from firestore
   const onStarClick = async (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => {
-    //console.log("state:", isFavoriteArticle)
-    isFavoriteArticle ? await dispatch(removeFavoriteArticles(favoriteArticle.id)) :
-      await dispatch(fetchFavoriteArticles(favoriteArticle))
+    isFavoriteArticle ? await dispatch(removeFavoriteArticles(favoriteArticle.id)).unwrap() :
+      await dispatch(fetchFavoriteArticles(favoriteArticle)).unwrap()
   }
 
   return (
@@ -72,7 +73,6 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
 
   );
 }
-//isFavoriteArticle={isFavoriteArticle} setFavoriteArticle={setFavoriteArticle}
 
 const styles = StyleSheet.create({
   mainContainer: {

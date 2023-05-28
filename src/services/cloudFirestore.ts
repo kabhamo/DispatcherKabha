@@ -8,34 +8,29 @@ import { FavoriteArticle, UserCredential } from '../util/types';
 //Get the uid from the asyncStorage and get/create a document named uid
 //finally, push the favorite article input to uid-document inside favoriteArticles array field
 export const addFavoriteArticleByUserId = async ({ id, title, urlToImage, publishedAt }: FavoriteArticle, uid: string) => {
-    try {
-        //get the data
-        const userDocument = firestore().collection('Users').doc(uid);
-        const data = (await userDocument.get()).data()
-        //if first time add an empty array
-        const input: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
+    //get the data
+    const userDocument = firestore().collection('Users').doc(uid);
+    const data = (await userDocument.get()).data()
+    //if first time add an empty array
+    const input: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
 
-        let isDataExist: boolean = false;
-        //check the data exist
-        if (data && data.favoriteArticles) { 
-            //check if the new article is already added
-            isDataExist = data?.favoriteArticles.some((article : FavoriteArticle) => article.id === id)
-            if (!isDataExist) { 
-                //add the new data to the array input
-                input.push({ id, title, urlToImage, publishedAt });
-                //adding the array
-                await userDocument.set({favoriteArticles: input});
-            }
-        } else {
-            //If it is first time and data dose not exist, create new one
+    let isDataExist: boolean = false;
+    //check the data exist
+    if (data && data.favoriteArticles) { 
+        //check if the new article is already added
+        isDataExist = data?.favoriteArticles.some((article : FavoriteArticle) => article.id === id)
+        if (!isDataExist) { 
+            //add the new data to the array input
             input.push({ id, title, urlToImage, publishedAt });
+            //adding the array
             await userDocument.set({favoriteArticles: input});
         }
-        return true
-    } catch (ex) { 
-        console.log(ex)
-        return ex;
+    } else {
+        //If it is first time and data dose not exist, create new one
+        input.push({ id, title, urlToImage, publishedAt });
+        await userDocument.set({favoriteArticles: input});
     }
+    return await getFavoriteArticleByUserId(uid)
 }
 
 export const removeFavoriteArticleByUserId = async (id: number | null, uid: string) => { 
@@ -49,5 +44,16 @@ export const removeFavoriteArticleByUserId = async (id: number | null, uid: stri
     //update the data
     const result = await userDocument.update({ favoriteArticles: input });
     
-    return result;
+    return await getFavoriteArticleByUserId(uid)
+}
+
+
+export const getFavoriteArticleByUserId = async (uid: string) => { 
+    //get the data
+    const userDocument = firestore().collection('Users').doc(uid);
+    const data = (await userDocument.get()).data();
+    //if the no data return empty array
+    let favoriteArticles: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
+
+    return favoriteArticles;
 }

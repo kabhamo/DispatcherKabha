@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { UserCredential, SerializedError } from '../../util/types'
-import { signUpAndSetUserCredential } from '../../services/apiService'
-import { ErrorFirebaseAuthEnum, LoadingStatus } from '../../util/enums'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { signUpAndSetUserCredential } from '../../services/firebaseAuth';
+import { ErrorFirebaseAuthEnum, LoadingStatus } from '../../util/enums';
+import { SerializedError } from '../../util/types';
 
 interface Params {
     email: string;
@@ -11,27 +11,19 @@ interface Params {
 
 // First, create the thunk
 export const fetchUserCredential = createAsyncThunk('userCredential/fetchUserCredential',
-    async ({email, password, rePassword} : Params, thunkAPI) => {
-        const userCredential = await signUpAndSetUserCredential(email, password, rePassword);
-        return userCredential;
+    async ({email, password, rePassword} : Params) => {
+        return await signUpAndSetUserCredential(email, password, rePassword);
     }
 )
 
 // Define a type for the slice state
 interface UserState {
-    value: UserCredential;
     loading: LoadingStatus;
     error: SerializedError;
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-    value: {
-        email: "",
-        token:"",
-        isLoggedIn: false,
-        lastLogin: ""
-    },
     loading: LoadingStatus.Idle,
     error: {
         code: "",
@@ -45,7 +37,6 @@ export const userSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         builder.addCase(fetchUserCredential.fulfilled, (state, action) => {
-            state.value = action.payload;
             state.loading = LoadingStatus.Succeeded;
             state.error = {code: "", message: ""}
         })

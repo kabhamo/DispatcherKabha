@@ -4,17 +4,21 @@ import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, View } from 'reac
 import { DispatcherArticleCard } from '../components/HomeScreenComponents/DispatcherArticleCard';
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
+import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { getData } from '../services/asyncStorage';
+import { fetchFavoriteArticles } from "../state/favoriteNews/favoriteNewsSlice";
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
+import { FavoriteArticle } from "../util/types";
 
 //todo Add the star(Favorite) logic and styles
 const { width, height } = Dimensions.get('screen')
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     openDrawer && navigation.openDrawer();
@@ -28,6 +32,10 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
     }
     getDateTime()
   }, [])
+
+  const onStarClick = async (favoriteArticle: FavoriteArticle) => {
+    await dispatch(fetchFavoriteArticles(favoriteArticle))
+  }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -45,7 +53,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         <Text style={styles.topTitle}>Top Headlines in UK</Text>
         <FlashList
           data={ARTICLES}
-          renderItem={({ item, index }) => <DispatcherArticleCard key={index} data={item} />}
+          renderItem={({ item, index }) => <DispatcherArticleCard key={index} data={item} onStarClick={onStarClick} />}
           estimatedItemSize={height}
         />
       </View>

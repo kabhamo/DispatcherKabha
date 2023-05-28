@@ -1,10 +1,10 @@
 import React from 'react'
 import { Image, Platform, StyleSheet, Text, View } from 'react-native'
 import { colors } from '../../util/colors'
-import { FavoriteArticles } from '../../util/types'
+import { FavoriteArticle } from '../../util/types'
 
 type DispatcherFavArticleCardProps = {
-    data: FavoriteArticles
+    data: FavoriteArticle
 }
 
 export const DispatcherFavArticleCard: React.FC<DispatcherFavArticleCardProps> = ({ data }) => {
@@ -14,7 +14,7 @@ export const DispatcherFavArticleCard: React.FC<DispatcherFavArticleCardProps> =
             <View style={styles.imageContainer}>
                 <Image
                     style={styles.image}
-                    source={{ uri: data.imageUrl }}
+                    source={{ uri: data.urlToImage }}
                 />
             </View>
 

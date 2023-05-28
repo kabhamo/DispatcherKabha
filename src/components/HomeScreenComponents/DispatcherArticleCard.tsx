@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../../util/colors';
-import { ArticleResponse } from '../../util/types';
+import { ArticleResponse, FavoriteArticle } from '../../util/types';
 import { DispatcherArticleButton } from './DispatcherArticleButton';
 
 type DispatcherArticleCardProps = {
-    data: ArticleResponse
+    data: ArticleResponse,
+    onStarClick: (favoriteArticle: FavoriteArticle) => Promise<void>
 }
 
 const { width, height } = Dimensions.get('screen')
-export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data }) => {
+export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, onStarClick }) => {
     const [date, setDate] = useState<Date>(new Date())
+
     useEffect(() => {
-        if (data.publishedAt) {
-            setDate(new Date(data.publishedAt))
-        }
+        data.publishedAt && setDate(new Date(data.publishedAt))
     }, [])
 
     return (
@@ -22,6 +23,11 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
 
             <View style={styles.imageContainer}>
                 <Image style={[styles.imageContainer, { height: height * 0.21 }]} source={{ uri: data.urlToImage }} />
+                <TouchableOpacity
+                    style={styles.close}
+                    onPress={() => onStarClick({ title: data.title, urlToImage: data.urlToImage, publishedAt: data.publishedAt })}>
+                    <Icon name='star' size={25} color={'yellow'} />
+                </TouchableOpacity>
             </View>
 
             <View style={styles.dateTitleSourceContainer}>
@@ -108,5 +114,22 @@ const styles = StyleSheet.create({
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
         fontWeight: "500",
         opacity: 0.5
+    },
+    close: {
+        margin: '2%',
+        position: "absolute",
+        left: '88%',
     }
 })
+
+/*
+close: {
+    margin: 5,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 25,
+    height: 25,
+    color: "tomato"
+  }
+*/

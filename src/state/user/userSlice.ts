@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { signUpAndSetUserCredential } from '../../services/firebaseAuth';
+import { logoutUser, signUpAndSetUserCredential } from '../../services/firebaseAuth';
 import { ErrorFirebaseAuthEnum, LoadingStatus } from '../../util/enums';
 import { SerializedError } from '../../util/types';
 
@@ -13,6 +13,12 @@ interface Params {
 export const fetchUserCredential = createAsyncThunk('userCredential/fetchUserCredential',
     async ({email, password, rePassword} : Params) => {
         return await signUpAndSetUserCredential(email, password, rePassword);
+    }
+)
+
+export const logoutUserAndNavigate = createAsyncThunk('logoutUser/logoutUser',
+    async () => {
+        return await logoutUser();
     }
 )
 
@@ -36,14 +42,33 @@ export const userSlice = createSlice({
   initialState,
     reducers: {},
     extraReducers(builder) {
+        //when fetch succeeded update the loading status
         builder.addCase(fetchUserCredential.fulfilled, (state, action) => {
             state.loading = LoadingStatus.Succeeded;
             state.error = {code: "", message: ""}
         })
+        //when fetching update the loading status
         builder.addCase(fetchUserCredential.pending, (state) => {
             state.loading = LoadingStatus.Pending
-            //state.error = null
-        }); 
+        });
+        //when loggingout update the loading 
+        builder.addCase(logoutUserAndNavigate.pending, (state) => {
+            state.loading = LoadingStatus.Pending
+        });
+        //when logout fulfilled update the loading 
+        builder.addCase(logoutUserAndNavigate.fulfilled, (state) => {
+            state.loading = LoadingStatus.Succeeded
+        });
+        //when loggingout faild update the loading and the error state
+        builder.addCase(logoutUserAndNavigate.rejected, (state, action) => {
+            state.loading = LoadingStatus.Failed
+            state.error = {
+                code: ErrorFirebaseAuthEnum.LogoutFailed,
+                message: action.error.message ? action.error.message : ""
+            }
+            state.error.message = state.error.message.replace(state.error.code, "").replace("[]", "")
+        });
+        //when fetching fialed update the loading and the error state
         builder.addCase(fetchUserCredential.rejected, (state, action) => {
             state.loading = LoadingStatus.Failed;
             if (action.error.message === ErrorFirebaseAuthEnum.UnmatchedPassword) {

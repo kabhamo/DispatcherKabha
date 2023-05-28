@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../../util/colors'
@@ -32,7 +32,7 @@ export const PasswordInputComponent: React.FC<Props> = ({ placeholder, type, err
         }
     }
     return (
-        <View>
+        <>
             <View style={[styles.passwordContainer, { borderColor: isPasswordError ? colors.error : colors.gray }]}>
                 <TextInput
                     style={{ fontSize: 20, width: '90%', color: colors.primaryBlackTwo }}
@@ -52,7 +52,7 @@ export const PasswordInputComponent: React.FC<Props> = ({ placeholder, type, err
             </View>
             {isPasswordError ?
                 <Text style={styles.error}>{error.message}</Text> : null}
-        </View>
+        </>
     )
 }
 
@@ -61,8 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 16,
         borderWidth: 2,
-        width: "88%",
-        backgroundColor: "#FFFFFF",
+        width: "87%",
         paddingVertical: 11,
         borderRadius: 4,
     },

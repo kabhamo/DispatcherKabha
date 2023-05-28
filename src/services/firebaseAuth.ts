@@ -41,3 +41,7 @@ export const signUpAndSetUserCredential = async (email: string, password: string
     }
     return payloadUserCredential;
 }
+
+export const logoutUser = async () => { 
+    await auth().signOut()
+}

@@ -63,7 +63,7 @@ export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigat
                         ))}
                     </ScrollView>
                         //todo add styles
-                        : <Text>You don't have any favorite articles yet!</Text>}
+                        : <Text adjustsFontSizeToFit numberOfLines={1} style={styles.emptyText}>You don't have any favorite articles yet!</Text>}
                 </View>
 
             </View>
@@ -106,4 +106,11 @@ const styles = StyleSheet.create({
         color: colors.primaryBlack,
         fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
     },
+    emptyText: {
+        fontSize: 20,
+        color: colors.grayDark,
+        fontWeight: '600',
+        textAlign: 'center',
+        marginTop: '10%'
+    }
 })

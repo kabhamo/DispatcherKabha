@@ -24,6 +24,7 @@ export type ArticleResponse = {
 }
 
 export type FavoriteArticle = {
+    id: number | null,
     title: string | null,
     urlToImage: string | undefined,
     publishedAt: string | null,

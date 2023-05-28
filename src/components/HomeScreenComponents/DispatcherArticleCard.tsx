@@ -7,17 +7,33 @@ import { DispatcherArticleButton } from './DispatcherArticleButton';
 
 type DispatcherArticleCardProps = {
     data: ArticleResponse,
-    onStarClick: (favoriteArticle: FavoriteArticle) => Promise<void>
+    index: number,
+    //isFavoriteArticle: boolean,
+    //setFavoriteArticle: React.Dispatch<React.SetStateAction<boolean>>,
+    onStarClick: (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => Promise<void>
 }
 
 const { width, height } = Dimensions.get('screen')
-export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, onStarClick }) => {
+export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, index, onStarClick }) => {
+    const [isFavoriteArticle, setFavoriteArticle] = useState<boolean>(false);
     const [date, setDate] = useState<Date>(new Date())
 
     useEffect(() => {
         data.publishedAt && setDate(new Date(data.publishedAt))
     }, [])
 
+    const onPressHandler = () => {
+        setFavoriteArticle(!isFavoriteArticle)
+        onStarClick(
+            {
+                id: index,
+                title: data.title,
+                urlToImage: data.urlToImage,
+                publishedAt: data.publishedAt
+            },
+            isFavoriteArticle
+        )
+    }
     return (
         <View style={styles.mainContainer}>
 
@@ -25,8 +41,8 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
                 <Image style={[styles.imageContainer, { height: height * 0.21 }]} source={{ uri: data.urlToImage }} />
                 <TouchableOpacity
                     style={styles.close}
-                    onPress={() => onStarClick({ title: data.title, urlToImage: data.urlToImage, publishedAt: data.publishedAt })}>
-                    <Icon name='star' size={25} color={'yellow'} />
+                    onPress={() => onPressHandler()}>
+                    <Icon style={isFavoriteArticle ? { opacity: 1 } : { opacity: 0.5 }} name='star' size={27} color={colors.white} />
                 </TouchableOpacity>
             </View>
 

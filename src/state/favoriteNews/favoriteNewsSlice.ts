@@ -1,15 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ErrorFirebaseAuthEnum, LoadingStatus } from '../../util/enums';
-import type { SerializedError, FavoriteArticle } from '../../util/types';
-import { addFavoriteArticleByUserId } from '../../services/cloudFirestore';
+import { addFavoriteArticleByUserId, removeFavoriteArticleByUserId } from '../../services/cloudFirestore';
+import { AsyncLocalStorageKeysType, LoadingStatus } from '../../util/enums';
+import type { FavoriteArticle, SerializedError, UserCredential } from '../../util/types';
+import { getData } from '../../services/asyncStorage';
 
 // params is a single favArticle
 export const fetchFavoriteArticles = createAsyncThunk('favoriteArticles/fetchFavoriteArticles',
-    async (favoriteArticle :FavoriteArticle) => { 
-        //call the api to firestore
-        //return response(success/failure)
-        return await addFavoriteArticleByUserId(favoriteArticle, 'uid')
+    async (favoriteArticle: FavoriteArticle) => {
+        try {
+            const userCredential: UserCredential = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+            return await addFavoriteArticleByUserId(favoriteArticle, userCredential.uid)
+        } catch (ex) { 
+            return ex
+        }
     })
+
+export const removeFavoriteArticles = createAsyncThunk('favoriteArticles/removeFavoriteArticles',
+    async (id: number | null) => { 
+        try {
+            const userCredential: UserCredential = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+            return await removeFavoriteArticleByUserId(id, userCredential.uid)
+        } catch (ex) { 
+            return ex
+        }
+})
 
 
 interface FavoriteNews { 
@@ -31,5 +45,29 @@ export const favoriteNewsSlice = createSlice({
     reducers: {},
     extraReducers(builder) {
         
+        //? fetchFavoriteArticles
+        builder.addCase(fetchFavoriteArticles.fulfilled, (state, action) => { 
+            console.log("fulfilled")
+        })
+        builder.addCase(fetchFavoriteArticles.pending, (state, action) => { 
+            console.log("pending")
+        })
+        builder.addCase(fetchFavoriteArticles.rejected, (state, action) => { 
+            console.log("rejected", action.error)
+        })
+
+        //? removeFavoriteArticles
+        builder.addCase(removeFavoriteArticles.fulfilled, (state, action) => { 
+            console.log("fulfilled", state)
+        })
+        builder.addCase(removeFavoriteArticles.pending, (state, action) => { 
+            console.log("pending", action)
+        })
+        builder.addCase(removeFavoriteArticles.rejected, (state, action) => {
+            console.log("rejected", action)
+         })
     },
+
 })
+
+export default favoriteNewsSlice.reducer

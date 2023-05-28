@@ -7,7 +7,7 @@ import { DispatcherFilterBar } from '../components/HomeScreenComponents/Dispatch
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { getData } from '../services/asyncStorage';
-import { fetchFavoriteArticles } from "../state/favoriteNews/favoriteNewsSlice";
+import { fetchFavoriteArticles, removeFavoriteArticles } from "../state/favoriteNews/favoriteNewsSlice";
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
@@ -16,6 +16,7 @@ import { FavoriteArticle } from "../util/types";
 //todo Add the star(Favorite) logic and styles
 const { width, height } = Dimensions.get('screen')
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
+  //const [isFavoriteArticle, setFavoriteArticle] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
   const dispatch = useAppDispatch();
@@ -33,8 +34,10 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
     getDateTime()
   }, [])
 
-  const onStarClick = async (favoriteArticle: FavoriteArticle) => {
-    await dispatch(fetchFavoriteArticles(favoriteArticle))
+  const onStarClick = async (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => {
+    //console.log("state:", isFavoriteArticle)
+    isFavoriteArticle ? await dispatch(removeFavoriteArticles(favoriteArticle.id)) :
+      await dispatch(fetchFavoriteArticles(favoriteArticle))
   }
 
   return (
@@ -53,7 +56,14 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         <Text style={styles.topTitle}>Top Headlines in UK</Text>
         <FlashList
           data={ARTICLES}
-          renderItem={({ item, index }) => <DispatcherArticleCard key={index} data={item} onStarClick={onStarClick} />}
+          renderItem={({ item, index }) =>
+            <DispatcherArticleCard
+              key={index}
+              data={item}
+              index={index}
+              onStarClick={onStarClick}
+            />
+          }
           estimatedItemSize={height}
         />
       </View>
@@ -62,6 +72,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
 
   );
 }
+//isFavoriteArticle={isFavoriteArticle} setFavoriteArticle={setFavoriteArticle}
 
 const styles = StyleSheet.create({
   mainContainer: {

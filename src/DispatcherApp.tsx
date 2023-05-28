@@ -48,7 +48,7 @@ function DispatcherApp(): JSX.Element {
         <View style={{ flex: 1 }}>
             <NavigationContainer>
                 <RootStack.Navigator
-                    initialRouteName='Auth'//{isOnBoarding ? "OnBoarding" : "Auth"}
+                    initialRouteName='Drawer'//{isOnBoarding ? "OnBoarding" : "Auth"}
                     screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.white } }}>
                     <RootStack.Screen name="Auth" component={AuthStack} />
                     <RootStack.Screen name="Drawer" component={AppDrawer} />

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { favoriteArticlesSlice } from './favoriteNews/favoriteNewsSlice'
+import { favoriteArticlesSlice } from './favoriteArticles/favoriteArticlesSlice'
 import { userSlice } from './user/userSlice'
 
 // The Redux Toolkit configureStore API automatically adds the thunk middleware during store creation,

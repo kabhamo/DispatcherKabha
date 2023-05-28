@@ -4,24 +4,8 @@ import { DispatcherFavArticleCard } from '../components/FavoriteScreenComponents
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { FavoriteScreenNavigationProp } from '../routes/types/navigationTypes';
-import { getFavoriteArticles } from '../state/favoriteNews/favoriteNewsSlice';
+import { getFavoriteArticles } from '../state/favoriteArticles/favoriteArticlesSlice';
 import { colors } from '../util/colors';
-import type { FavoriteArticle } from '../util/types';
-
-const FAVARTICLE: FavoriteArticle[] = [
-    {
-        id: 0,
-        title: "Spanish football chief admits racism problem after Vinícius Júnior abuse - The Guardian",
-        urlToImage: "https://i.guim.co.uk/img/media/aa1cb5ea7d2738d70f1721a4897b488c453933a4/0_89_5000_2999/master/5000.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdGctZGVmYXVsdC5wbmc&enable=upscale&s=401ae3554c59771835168deab79830af",
-        publishedAt: null
-    },
-    {
-        id: 0,
-        title: "NBA playoffs: Celtics-Heat Game 4 live updates, scores, lineups, injury report, how to watch, TV channel - Yahoo Sports",
-        urlToImage: "https://s.yimg.com/ny/api/res/1.2/ioo8sNDkvAMtslMs3kMDzA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://s.yimg.com/os/creatr-uploaded-images/2023-05/c747d500-f9af-11ed-bf2f-75837ac956c5",
-        publishedAt: null
-    }
-]
 
 const { width, height } = Dimensions.get('screen');
 
@@ -29,7 +13,8 @@ export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigat
     const favoriteArticles = useAppSelector(state => state.favoriteArticles.value)
     const dispatch = useAppDispatch();
 
-    //When login to the app we need to retrive the data - (redux live in memory)
+    //When login and open favorite screen it is needed to retrive the data
+    //redux live in memory which will be deleted after closing the app
     useEffect(() => {
         const dispatchStateData = async () => {
             await dispatch(getFavoriteArticles()).unwrap()

@@ -12,7 +12,8 @@ export enum ErrorFirebaseAuthEnum {
     NetworkError = "auth/network-request-failed",
     UnmatchedPassword = "local/unmatched-passwords",
     WeakPassword = "auth/weak-password",
-    WrongPassword = "auth/wrong-password"
+    WrongPassword = "auth/wrong-password",
+    LogoutFailed = "auth/no-current-user"
 }
 
 export enum AsyncLocalStorageKeysType { 
@@ -25,4 +26,10 @@ export enum LoadingStatus {
     Pending = 'Pending',
     Succeeded = 'Succeeded',
     Failed = 'Failed'
+}
+
+export enum ProfileTabs { 
+    Setting = 1,
+    Terms = 2,
+    Logout = 3
 }

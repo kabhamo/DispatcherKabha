@@ -4,23 +4,29 @@ import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, View } from 'reac
 import { DispatcherArticleCard } from '../components/HomeScreenComponents/DispatcherArticleCard';
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
+import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { getData } from '../services/asyncStorage';
+import { fetchFavoriteArticles, removeFavoriteArticles } from "../state/favoriteArticles/favoriteArticlesSlice";
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
+import { FavoriteArticle } from "../util/types";
 
-//todo Add the star(Favorite) logic and styles
 const { width, height } = Dimensions.get('screen')
+
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
+  const dispatch = useAppDispatch();
 
+  //close and open the drawer menu
   useEffect(() => {
     openDrawer && navigation.openDrawer();
     return () => setOpenDrawer(false);
   }, [openDrawer]);
 
+  //fetch last login state from asyncStorage
   useEffect(() => {
     const getDateTime = async () => {
       const result = await getData(AsyncLocalStorageKeysType.UserAuthKey);
@@ -28,6 +34,12 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
     }
     getDateTime()
   }, [])
+
+  //depend on the icon state fetch favoriteArticle or remove from firestore
+  const onStarClick = async (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => {
+    isFavoriteArticle ? await dispatch(removeFavoriteArticles(favoriteArticle.id)).unwrap() :
+      await dispatch(fetchFavoriteArticles(favoriteArticle)).unwrap()
+  }
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -45,7 +57,14 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         <Text style={styles.topTitle}>Top Headlines in UK</Text>
         <FlashList
           data={ARTICLES}
-          renderItem={({ item, index }) => <DispatcherArticleCard key={index} data={item} />}
+          renderItem={({ item, index }) =>
+            <DispatcherArticleCard
+              key={index}
+              data={item}
+              index={index}
+              onStarClick={onStarClick}
+            />
+          }
           estimatedItemSize={height}
         />
       </View>

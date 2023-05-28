@@ -1,11 +1,16 @@
+import React, { useEffect } from 'react';
 import 'react-native-gesture-handler';
-import React from 'react';
-import { Provider } from 'react-redux'
-import { store } from './src/state/store';
+import SplashScreen from 'react-native-splash-screen';
+import { Provider } from 'react-redux';
 import DispatcherApp from './src/DispatcherApp';
-import { NavigationContainer } from '@react-navigation/native';
+import { store } from './src/state/store';
 
 function App(): JSX.Element {
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
+
   return (
     <Provider store={store}>
       <DispatcherApp />

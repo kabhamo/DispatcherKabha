@@ -1,8 +1,6 @@
 import { ImageProps } from 'react-native';
 import { ArticleResponse } from './types';
 
-export const BACKGROUND_COLOR = '#F1F1F1';
-
 // todo make sure u understan the Pick
 export interface PageInterface extends Pick<ImageProps, 'source'> {
   title: string;

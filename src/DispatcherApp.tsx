@@ -20,9 +20,9 @@ function DispatcherApp(): JSX.Element {
     //const user = useAppSelector(state => state.user.value)
     const [isOnBoarding, setIsOnBoarding] = useState<boolean>(false);
 
-    useEffect(() => {
-        SplashScreen.hide();
-    })
+    //useEffect(() => {
+    //    SplashScreen.hide();
+    //}, [])
 
     // todo: check the onBoarding logics condition - first Auth or OnBoarding ? 
     useEffect(() => {
@@ -48,7 +48,7 @@ function DispatcherApp(): JSX.Element {
         <View style={{ flex: 1 }}>
             <NavigationContainer>
                 <RootStack.Navigator
-                    initialRouteName='Drawer'//{isOnBoarding ? "OnBoarding" : "Auth"}
+                    initialRouteName='Auth'//{isOnBoarding ? "OnBoarding" : "Auth"}
                     screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.white } }}>
                     <RootStack.Screen name="Auth" component={AuthStack} />
                     <RootStack.Screen name="Drawer" component={AppDrawer} />

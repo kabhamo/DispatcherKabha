@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Image,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text, View
@@ -20,7 +21,7 @@ import { SerializedError } from '../util/types';
 const { height, width } = Dimensions.get('screen')
 
 const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route }: SignupScreenNavigationProp) => {
-  const [visibility, setVisibility] = useState<boolean>(true);
+  const [visibility, setVisibility] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rePassword, setRePassword] = useState<string>("");
@@ -29,7 +30,6 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
   const user = useAppSelector(state => state.user)
 
   useEffect(() => {
-    console.log("useEffect:", user.error)
     if (user.error.code || user.error.message) {
       setError(user.error)
     }
@@ -60,7 +60,7 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
 
       </View>
 
-      <View style={styles.inputsContainer} >
+      <KeyboardAvoidingView behavior="padding" style={styles.inputsContainer}  >
         <EmailInputComponent
           placeholder='Your email'
           error={error}
@@ -91,7 +91,7 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
             error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
           <Text style={styles.error}>{error.message}</Text> : null}
 
-      </View>
+      </KeyboardAvoidingView>
 
       <View style={styles.btnsContainer}>
         {user.loading === LoadingStatus.Pending ?

@@ -59,12 +59,17 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         <DispatcherFilterBar setOpenDrawer={setOpenDrawer} />
       </View>
 
+      <View style={{ backgroundColor: colors.white }}>
+        <View style={styles.textsContainer}>
+          <Text style={styles.lastLogin}>
+            Last Login:
+            <Text style={styles.dateTime}>{` ${dateTime}`}</Text>
+          </Text>
+          <Text style={styles.topTitle}>Top Headlines in UK</Text>
+        </View>
+      </View>
+
       <View style={styles.articleContainer}>
-        <Text style={styles.lastLogin}>
-          Last Login:
-          <Text style={styles.dateTime}>{` ${dateTime}`}</Text>
-        </Text>
-        <Text style={styles.topTitle}>Top Headlines in UK</Text>
         <FlashList
           data={articles}
           renderItem={({ item, index }) =>
@@ -95,6 +100,13 @@ const styles = StyleSheet.create({
   articleContainer: {
     flex: 5,
     backgroundColor: colors.white
+  },
+  textsContainer: {
+    borderRadius: 5,
+    borderWidth: 2,
+    borderTopWidth: 0,
+    borderColor: colors.gray,
+    backgroundColor: colors.white,
   },
   topTitle: {
     paddingLeft: '5%',

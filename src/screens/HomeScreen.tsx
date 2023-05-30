@@ -6,13 +6,14 @@ import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar'
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
-import { getData } from '../services/asyncStorage';
+import { getLocalData, removeLocalValue, storeLocalData } from '../services/asyncStorage';
 import { fetchFavoriteArticles, removeFavoriteArticles } from "../state/favoriteArticles/favoriteArticlesSlice";
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
 import { ArticleResponse, FavoriteArticle } from "../util/types";
 import { getArticles } from "../services/articlesAPI";
+import { getFavoriteArticleByUserId, removeFavoriteArticleByUserId } from "../services/cloudFirestore";
 
 const { width, height } = Dimensions.get('screen')
 
@@ -22,10 +23,18 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
   const [dateTime, setDateTime] = useState<string>("");
   const dispatch = useAppDispatch();
 
-  //call api and get articles
+  //retrive the articles from asyncLocalStorage
   useEffect(() => {
     async function getData() {
-      setArticles(await getArticles())
+      // Try fetching articles from API
+      const articles = await getArticles()
+      // If it works, then save to local storage
+      if (articles.length !== 0) {
+        //store the data in local storage
+        await storeLocalData(AsyncLocalStorageKeysType.ArticlesKey, articles)
+      }
+      // FINALLY, return articles from local storage.
+      setArticles(await getLocalData(AsyncLocalStorageKeysType.ArticlesKey))
     }
     getData();
   }, [])
@@ -39,7 +48,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
   //fetch last login state from asyncStorage
   useEffect(() => {
     const getDateTime = async () => {
-      const result = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+      const result = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
       setDateTime(result.lastLogin);
     }
     getDateTime()
@@ -70,18 +79,22 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
       </View>
 
       <View style={styles.articleContainer}>
-        <FlashList
-          data={articles}
-          renderItem={({ item, index }) =>
-            <DispatcherArticleCard
-              key={index}
-              data={item}
-              index={index}
-              onStarClick={onStarClick}
-            />
-          }
-          estimatedItemSize={height}
-        />
+        {articles ?
+          <FlashList
+            data={articles}
+            renderItem={({ item, index }) =>
+              <DispatcherArticleCard
+                key={index}
+                data={item}
+                index={index}
+                onStarClick={onStarClick}
+              />
+            }
+            estimatedItemSize={height}
+          />
+          :
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.errorText}>Error with retriving articles</Text>
+        }
       </View>
 
     </SafeAreaView>
@@ -131,5 +144,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "500",
     color: colors.primaryBlackTwo,
+  },
+  errorText: {
+    fontSize: 20,
+    color: colors.grayDark,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: '10%'
   }
 })

@@ -9,7 +9,7 @@ import AppDrawer from './routes/AppDrawer';
 import type { RootStackParamList } from "./routes/types/navigationTypes";
 import { OnBoarding } from "./screens/OnBoardingScreen";
 import { colors } from "./util/colors";
-import { getData, storeData } from './services/asyncStorage';
+import { getLocalData, storeLocalData } from './services/asyncStorage';
 import { AsyncLocalStorageKeysType } from './util/enums';
 
 
@@ -24,10 +24,10 @@ function DispatcherApp(): JSX.Element {
     useEffect(() => {
         async function onBoarding() {
             try {
-                const appData = await getData(AsyncLocalStorageKeysType.OnBoardingKey);
+                const appData = await getLocalData(AsyncLocalStorageKeysType.OnBoardingKey);
                 if (appData) {
                     setIsOnBoarding(true);
-                    storeData(AsyncLocalStorageKeysType.OnBoardingKey, false);
+                    storeLocalData(AsyncLocalStorageKeysType.OnBoardingKey, false);
                 } else {
                     setIsOnBoarding(false);
                 }

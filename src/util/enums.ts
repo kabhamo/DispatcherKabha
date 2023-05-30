@@ -18,7 +18,9 @@ export enum ErrorFirebaseAuthEnum {
 
 export enum AsyncLocalStorageKeysType { 
     UserAuthKey = "@userAuthKey",
-    OnBoardingKey = "@isOnBoarding"
+    OnBoardingKey = "@isOnBoarding",
+    ArticlesKey = "@articles",
+    FavoriteArticle = "@favoriteArticles"
 }
 //'idle' | 'pending' | 'succeeded' | 'failed';
 export enum LoadingStatus { 

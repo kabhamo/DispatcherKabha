@@ -2,24 +2,24 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { addFavoriteArticleByUserId, getFavoriteArticleByUserId, removeFavoriteArticleByUserId } from '../../services/cloudFirestore';
 import { AsyncLocalStorageKeysType, LoadingStatus } from '../../util/enums';
 import type { FavoriteArticle, SerializedError, UserCredential } from '../../util/types';
-import { getData } from '../../services/asyncStorage';
+import { getLocalData } from '../../services/asyncStorage';
 
 // params is a single favArticle
 export const fetchFavoriteArticles = createAsyncThunk('favoriteArticles/fetchFavoriteArticles',
     async (favoriteArticle: FavoriteArticle) => {
-        const userCredential: UserCredential = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+        const userCredential: UserCredential = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
         return await addFavoriteArticleByUserId(favoriteArticle, userCredential.uid)
     })
 
 export const removeFavoriteArticles = createAsyncThunk('favoriteArticles/removeFavoriteArticles',
     async (id: number | null) => { 
-        const userCredential: UserCredential = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+        const userCredential: UserCredential = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
         return await removeFavoriteArticleByUserId(id, userCredential.uid)
     })
 
 export const getFavoriteArticles = createAsyncThunk('favoriteArticles/getFavoriteArticles',
     async () => { 
-        const userCredential: UserCredential = await getData(AsyncLocalStorageKeysType.UserAuthKey);
+        const userCredential: UserCredential = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
         return await getFavoriteArticleByUserId(userCredential.uid)
 })
 

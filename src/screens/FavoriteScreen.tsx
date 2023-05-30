@@ -37,7 +37,7 @@ export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigat
                 </View>
 
                 <View style={styles.scrollViewContainer}>
-                    {favoriteArticles.length > 0 ? <ScrollView>
+                    {favoriteArticles && favoriteArticles.length > 0 ? <ScrollView>
                         {favoriteArticles.map((article, index) => (
                             <TouchableOpacity
                                 key={index}

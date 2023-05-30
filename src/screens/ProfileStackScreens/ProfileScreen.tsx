@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { Alert, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Icon from 'react-native-vector-icons/Feather'
-import { ProfileAppBar } from '../components/ProfileScreenComponents/ProfileAppBar'
-import { ProfileScreenNavigationProp } from '../routes/types/navigationTypes'
-import { colors } from '../util/colors'
-import { LoadingStatus, ProfileTabs } from '../util/enums'
-import { ProfileTab } from '../util/types'
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
-import { logoutUserAndNavigate } from '../state/user/userSlice'
+import { ProfileAppBar } from '../../components/ProfileScreenComponents/ProfileAppBar'
+import { ProfileNavigationProp } from '../../routes/types/navigationTypes'
+import { colors } from '../../util/colors'
+import { LoadingStatus, ProfileTabs } from '../../util/enums'
+import { ProfileTab } from '../../util/types'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { logoutUserAndNavigate } from '../../state/user/userSlice'
 
 type ProfileScreenProps = {}
 
@@ -30,7 +30,7 @@ const TABS: ProfileTab[] = [
     }
 ]
 
-export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigation, route }: ProfileScreenNavigationProp) => {
+export const ProfileScreen: React.FC<ProfileNavigationProp> = ({ navigation, route }: ProfileNavigationProp) => {
     const loadingStatus = useAppSelector(state => state.user)
     const dispatch = useAppDispatch();
 
@@ -42,10 +42,13 @@ export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigatio
                 loadingStatus.loading === LoadingStatus.Failed && Alert.alert("Failed to logout", `${loadingStatus.error.message} \n Please refresh the application`)
                 break;
             case ProfileTabs.Terms:
-                console.log("Terms")
+                navigation.navigate('Terms')
                 break;
             case ProfileTabs.Setting:
-                console.log("settings")
+                navigation.navigate('Settings')
+                break;
+            case ProfileTabs.MyProfile:
+                navigation.navigate('MyProfile')
                 break;
             default:
                 break;
@@ -57,7 +60,7 @@ export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigatio
         <SafeAreaView style={styles.mainContainer}>
 
             <View style={styles.profileContainer}>
-                <ProfileAppBar />
+                <ProfileAppBar onEditProfilePress={onPressTabHandler} />
             </View>
             <View style={styles.tabsContainer}>
                 <ScrollView>

@@ -41,6 +41,6 @@ export type UserCredential = {
 export type ProfileTab = {
     id: number,
     name: string,
-    icon: JSX.Element
+    icon?: JSX.Element
 }
 

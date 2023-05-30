@@ -17,12 +17,8 @@ import { AsyncLocalStorageKeysType } from './util/enums';
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function DispatcherApp(): JSX.Element {
-    //const user = useAppSelector(state => state.user.value)
     const [isOnBoarding, setIsOnBoarding] = useState<boolean>(false);
 
-    //useEffect(() => {
-    //    SplashScreen.hide();
-    //}, [])
 
     // todo: check the onBoarding logics condition - first Auth or OnBoarding ? 
     useEffect(() => {

@@ -31,7 +31,8 @@ export enum LoadingStatus {
 export enum ProfileTabs { 
     Setting = 1,
     Terms = 2,
-    Logout = 3
+    Logout = 3,
+    MyProfile = 4,
 }
 
 export enum ArticleCategory { 

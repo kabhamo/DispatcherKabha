@@ -13,7 +13,7 @@ export const addFavoriteArticleByUserId = async ({ id, title, urlToImage, publis
     const data = (await userDocument.get()).data()
     //if first time add an empty array
     const input: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
-
+    
     let isDataExist: boolean = false;
     //check the data exist
     if (data && data.favoriteArticles) { 

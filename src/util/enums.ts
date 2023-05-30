@@ -33,3 +33,13 @@ export enum ProfileTabs {
     Terms = 2,
     Logout = 3
 }
+
+export enum ArticleCategory { 
+    Business = 'business',
+    Entertainment = 'entertainmen0t',
+    General = 'general',
+    Health = 'health',
+    Science = 'science',
+    Sports = 'sports',
+    Technology = 'technology'
+}

@@ -11,14 +11,24 @@ import { fetchFavoriteArticles, removeFavoriteArticles } from "../state/favorite
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
-import { FavoriteArticle } from "../util/types";
+import { ArticleResponse, FavoriteArticle } from "../util/types";
+import { getArticles } from "../services/articlesAPI";
 
 const { width, height } = Dimensions.get('screen')
 
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
+  const [articles, setArticles] = useState<ArticleResponse[] | undefined>();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
   const dispatch = useAppDispatch();
+
+  //call api and get articles
+  useEffect(() => {
+    async function getData() {
+      setArticles(await getArticles())
+    }
+    getData();
+  }, [])
 
   //close and open the drawer menu
   useEffect(() => {
@@ -56,7 +66,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
         </Text>
         <Text style={styles.topTitle}>Top Headlines in UK</Text>
         <FlashList
-          data={ARTICLES}
+          data={articles}
           renderItem={({ item, index }) =>
             <DispatcherArticleCard
               key={index}

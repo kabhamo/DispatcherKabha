@@ -29,7 +29,7 @@ function AppTabs(): JSX.Element {
                 options={{
                     tabBarIcon: (e) => (
                         <Icon
-                            name="settings"
+                            name="user"
                             size={28}
                             color={e.focused ? colors.white : colors.grayDark}
                         />

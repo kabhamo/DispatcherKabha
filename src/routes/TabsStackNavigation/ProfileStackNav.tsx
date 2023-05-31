@@ -5,6 +5,7 @@ import { TermsScreen } from '../../screens/ProfileStackScreens/TermsScreen';
 import { SettingsScreen } from '../../screens/ProfileStackScreens/SettingsScreen';
 import { ProfileScreen } from '../../screens/ProfileStackScreens/ProfileScreen';
 import { MyProfileScreen } from '../../screens/ProfileStackScreens/MyProfileScreen';
+import { colors } from '../../util/colors';
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
 
@@ -12,7 +13,11 @@ function ProfileStackScreens(): JSX.Element {
 
     return (
         <ProfileStack.Navigator
-            screenOptions={{}}>
+            screenOptions={
+                {
+                    headerStyle: { backgroundColor: colors.primaryBlack },
+                    headerTintColor: colors.white
+                }}>
             <ProfileStack.Screen name='Profile' component={ProfileScreen} options={{ headerShown: false }} />
             <ProfileStack.Screen name='Settings' component={SettingsScreen} />
             <ProfileStack.Screen name='Terms' component={TermsScreen} />

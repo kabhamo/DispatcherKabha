@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Platform } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Platform, KeyboardAvoidingView } from 'react-native'
 import React from 'react'
 import { colors } from '../../util/colors'
 import { ErrorFirebaseAuthEnum } from '../../util/enums'
@@ -15,7 +15,7 @@ export const EmailInputComponent: React.FC<EmailInputComponentProps> = ({ placeh
             error.code === ErrorFirebaseAuthEnum.InvalidEmail ||
             error.code === ErrorFirebaseAuthEnum.UserNotFound)
     return (
-        <View>
+        <>
             <View style={styles.mainContainer}>
                 <TextInput
                     style={[styles.inputText, { borderColor: isEmailError ? colors.error : colors.gray }]}
@@ -27,7 +27,7 @@ export const EmailInputComponent: React.FC<EmailInputComponentProps> = ({ placeh
             </View>
             {isEmailError ?
                 <Text style={styles.error}>{error.message}</Text> : null}
-        </View>
+        </>
 
 
     );
@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     mainContainer: {
         flexDirection: 'row',
         width: "100%",
-        backgroundColor: "#FFFFFF",
+        justifyContent: 'center',
+        alignItems: "center",
     },
     inputText: {
         fontSize: 20,

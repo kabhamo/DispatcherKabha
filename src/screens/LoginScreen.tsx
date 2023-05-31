@@ -1,21 +1,23 @@
 import Lottie from 'lottie-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Dimensions, Image, Platform, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Dimensions, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
 import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
 import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
 import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
-import { fetchUserCredential } from '../state/user/userSlice';
+import { fetchUserCredential } from '../store/user/userSlice';
 import { colors } from '../util/colors';
 import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
 import { SerializedError } from '../util/types';
+import crashlytics from '@react-native-firebase/crashlytics';
+import SplashScreen from 'react-native-splash-screen';
 
 const { height, width } = Dimensions.get('screen')
 
 const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }: LoginScreenNavigationProp) => {
 
-  const [visibility, setVisibility] = useState<boolean>(true);
+  const [visibility, setVisibility] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<SerializedError | null>(null);
@@ -23,17 +25,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user)
 
-  const animationRef = useRef<Lottie>(null)
-  //todo add another dispatcher for the onBoarding, maybe there is no need
-
   useEffect(() => {
-    animationRef.current?.play()
-    // Or set a specific startFrame and endFrame with:
-    animationRef.current?.play(30, 120);
-  }, [])
-
-  useEffect(() => {
-    console.log(user.loading)
     if (user.error.code || user.error.message) {
       setError(user.error)
     }
@@ -61,7 +53,8 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
         <Text style={styles.text}> Login </Text>
       </View>
 
-      <View style={styles.inputsContainer} >
+      <KeyboardAvoidingView behavior="padding" style={styles.inputsContainer} >
+
         <EmailInputComponent
           placeholder='Your email'
           error={error}
@@ -83,7 +76,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
             error.code === ErrorFirebaseAuthEnum.NetworkError ||
             error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
           <Text style={styles.error}>{error.message}</Text> : null}
-      </View>
+      </KeyboardAvoidingView>
 
 
 
@@ -105,11 +98,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
               onPress={() => navigation.navigate('Auth', { screen: 'Signup' })} />
           </>
         }
-
       </View>
-
-
-
     </View>
   )
 }

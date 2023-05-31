@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, Platform } from 'react-native'
-import { ProfileScreenNavigationProp } from '../routes/types/navigationTypes'
-import { colors } from '../util/colors'
-import { ProfileAppBar } from '../components/ProfileScreenComponents/ProfileAppBar'
+import React, { useEffect } from 'react'
+import { Alert, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/Feather';
-import { ProfileTab } from '../util/types'
+import Icon from 'react-native-vector-icons/Feather'
+import { ProfileAppBar } from '../../components/ProfileScreenComponents/ProfileAppBar'
+import { ProfileNavigationProp } from '../../routes/types/navigationTypes'
+import { colors } from '../../util/colors'
+import { LoadingStatus, ProfileTabs } from '../../util/enums'
+import { ProfileTab } from '../../util/types'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { logoutUserAndNavigate } from '../../store/user/userSlice'
 
 type ProfileScreenProps = {}
 
@@ -27,17 +30,37 @@ const TABS: ProfileTab[] = [
     }
 ]
 
-export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigation, route }: ProfileScreenNavigationProp) => {
-    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+export const ProfileScreen: React.FC<ProfileNavigationProp> = ({ navigation, route }: ProfileNavigationProp) => {
+    const loadingStatus = useAppSelector(state => state.user)
+    const dispatch = useAppDispatch();
 
-    useEffect(() => {
+    const onPressTabHandler = async ({ id, name }: ProfileTab) => {
+        switch (id) {
+            case ProfileTabs.Logout:
+                await dispatch(logoutUserAndNavigate())
+                loadingStatus.loading === LoadingStatus.Succeeded && navigation.navigate('Auth', { screen: 'Login' });
+                loadingStatus.loading === LoadingStatus.Failed && Alert.alert("Failed to logout", `${loadingStatus.error.message} \n Please refresh the application`)
+                break;
+            case ProfileTabs.Terms:
+                navigation.navigate('Terms')
+                break;
+            case ProfileTabs.Setting:
+                navigation.navigate('Settings')
+                break;
+            case ProfileTabs.MyProfile:
+                navigation.navigate('MyProfile')
+                break;
+            default:
+                break;
+        }
 
-    }, [isDrawerOpen])
+    }
+
     return (
         <SafeAreaView style={styles.mainContainer}>
 
             <View style={styles.profileContainer}>
-                <ProfileAppBar />
+                <ProfileAppBar onEditProfilePress={onPressTabHandler} />
             </View>
             <View style={styles.tabsContainer}>
                 <ScrollView>
@@ -46,7 +69,7 @@ export const ProfileScreen: React.FC<ProfileScreenNavigationProp> = ({ navigatio
                             <TouchableOpacity
                                 key={index}
                                 style={styles.tabsView}
-                                onPress={() => console.log(`Navigate to ${tab.name}`)}
+                                onPress={() => onPressTabHandler(tab)}
                             >
                                 {tab.icon}
                                 <Text style={styles.tabsText}>{tab.name}</Text>

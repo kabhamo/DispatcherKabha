@@ -11,16 +11,10 @@ export type RootStackParamList = {
 
 export type OnBoardingScreenNavigationProp = NativeStackScreenProps<RootStackParamList, 'OnBoarding'>
 
-//export type NewBoardingScreenNavigationProp = CompositeScreenProps<
-//    NativeStackScreenProps<RootStackParamList, 'OnBoarding'>,
-
-//    >
-
 export type AuthParamList = {
     Login: undefined;
     Signup: undefined;
 };
-
 
 export type LoginScreenNavigationProp = CompositeScreenProps<
     NativeStackScreenProps<AuthParamList,'Login'>,
@@ -41,7 +35,7 @@ export type DrawerParamList = {
 
 export type BottomTabsParamList = {
     Home: undefined;
-    Profile: undefined;
+    ProfileStack: NavigatorScreenParams<ProfileStackParamList>;
     Favorite: undefined;
 }
 
@@ -52,10 +46,10 @@ export type HomeScreenNavigationProp = CompositeScreenProps<
     NativeStackScreenProps<RootStackParamList>
     >>;
 
-export type ProfileScreenNavigationProp = CompositeScreenProps<
-    BottomTabScreenProps<BottomTabsParamList,'Profile'>,
-    NativeStackScreenProps<RootStackParamList>
-    >;  
+//export type ProfileScreenNavigationProp = CompositeScreenProps<
+//    BottomTabScreenProps<BottomTabsParamList,'ProfileStack'>,
+//    NativeStackScreenProps<RootStackParamList>
+//    >;  
 
 export type FavoriteScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabsParamList,'Favorite'>,
@@ -63,5 +57,45 @@ export type FavoriteScreenNavigationProp = CompositeScreenProps<
     >; 
 
 
+export type ProfileStackParamList = {
+    Settings: undefined;
+    Terms: undefined;
+    Profile: undefined;
+    MyProfile: undefined;
 
+}
+export type ProfileNavigationProp =
+    CompositeScreenProps<
+        NativeStackScreenProps<ProfileStackParamList, 'Profile'>,
+        CompositeScreenProps<
+            BottomTabScreenProps<BottomTabsParamList>,
+            NativeStackScreenProps<RootStackParamList>
+        >
+    >    
+
+export type TermsNavigationProp =
+    CompositeScreenProps<
+        NativeStackScreenProps<ProfileStackParamList, 'Terms'>,
+        CompositeScreenProps<
+            BottomTabScreenProps<BottomTabsParamList>,
+            NativeStackScreenProps<RootStackParamList>
+        >
+    >    
+export type SettingsNavigationProp =
+    CompositeScreenProps<
+        NativeStackScreenProps<ProfileStackParamList, 'Settings'>,
+        CompositeScreenProps<
+            BottomTabScreenProps<BottomTabsParamList>,
+            NativeStackScreenProps<RootStackParamList>
+        >
+    >    
+
+    export type MyProfileNavigationProp =
+    CompositeScreenProps<
+        NativeStackScreenProps<ProfileStackParamList, 'MyProfile'>,
+        CompositeScreenProps<
+            BottomTabScreenProps<BottomTabsParamList>,
+            NativeStackScreenProps<RootStackParamList>
+        >
+    >   
 

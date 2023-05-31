@@ -12,12 +12,15 @@ export enum ErrorFirebaseAuthEnum {
     NetworkError = "auth/network-request-failed",
     UnmatchedPassword = "local/unmatched-passwords",
     WeakPassword = "auth/weak-password",
-    WrongPassword = "auth/wrong-password"
+    WrongPassword = "auth/wrong-password",
+    LogoutFailed = "auth/no-current-user"
 }
 
 export enum AsyncLocalStorageKeysType { 
     UserAuthKey = "@userAuthKey",
-    OnBoardingKey = "@isOnBoarding"
+    OnBoardingKey = "@isOnBoarding",
+    ArticlesKey = "@articles",
+    FavoriteArticle = "@favoriteArticles"
 }
 //'idle' | 'pending' | 'succeeded' | 'failed';
 export enum LoadingStatus { 
@@ -25,4 +28,21 @@ export enum LoadingStatus {
     Pending = 'Pending',
     Succeeded = 'Succeeded',
     Failed = 'Failed'
+}
+
+export enum ProfileTabs { 
+    Setting = 1,
+    Terms = 2,
+    Logout = 3,
+    MyProfile = 4,
+}
+
+export enum ArticleCategory { 
+    Business = 'business',
+    Entertainment = 'entertainmen0t',
+    General = 'general',
+    Health = 'health',
+    Science = 'science',
+    Sports = 'sports',
+    Technology = 'technology'
 }

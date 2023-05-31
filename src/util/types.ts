@@ -20,7 +20,7 @@ export type ArticleResponse = {
     url: string | null,
     urlToImage: string | undefined,
     publishedAt: string | null,
-    content: string | null
+    content: string | null,
 }
 
 export type FavoriteArticle = {
@@ -28,6 +28,7 @@ export type FavoriteArticle = {
     title: string | null,
     urlToImage: string | undefined,
     publishedAt: string | null,
+    isFavoriteArticle: boolean | null
 }
 
 export type UserCredential = {

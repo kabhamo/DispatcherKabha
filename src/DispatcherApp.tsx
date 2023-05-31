@@ -38,8 +38,6 @@ function DispatcherApp(): JSX.Element {
         }
         onBoarding();
     }, [isOnBoarding])
-
-    1
     return (
         <View style={{ flex: 1 }}>
             <NavigationContainer>

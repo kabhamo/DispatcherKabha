@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
-import { getData } from './asyncStorage';
+import { getLocalData, removeLocalValue, storeLocalData } from './asyncStorage';
 import { AsyncLocalStorageKeysType } from '../util/enums';
 import { FavoriteArticle, UserCredential } from '../util/types';
 
@@ -8,52 +8,47 @@ import { FavoriteArticle, UserCredential } from '../util/types';
 //Get the uid from the asyncStorage and get/create a document named uid
 //finally, push the favorite article input to uid-document inside favoriteArticles array field
 export const addFavoriteArticleByUserId = async ({ id, title, urlToImage, publishedAt }: FavoriteArticle, uid: string) => {
-    //get the data
+    //create a data cariable for favorite articles
+    const newLocalFavoriteArticles: FavoriteArticle[] = [];
+    //get all the favorite articles
+    const currentLocalFavoriteArticles = await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle);
+    const dataToAdd = currentLocalFavoriteArticles ? currentLocalFavoriteArticles : [];
+    newLocalFavoriteArticles.push(...dataToAdd)
+    newLocalFavoriteArticles.push({ id, title, urlToImage, publishedAt })
+    //save the favArticle to the localStorage
+    await storeLocalData(AsyncLocalStorageKeysType.FavoriteArticle, newLocalFavoriteArticles)
+        
+    console.log("array: ", newLocalFavoriteArticles)
+    //get the relevent document instance
     const userDocument = firestore().collection('Users').doc(uid);
-    const data = (await userDocument.get()).data()
-    //if first time add an empty array
-    const input: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
-
-    let isDataExist: boolean = false;
-    //check the data exist
-    if (data && data.favoriteArticles) { 
-        //check if the new article is already added
-        isDataExist = data?.favoriteArticles.some((article : FavoriteArticle) => article.id === id)
-        if (!isDataExist) { 
-            //add the new data to the array input
-            input.push({ id, title, urlToImage, publishedAt });
-            //adding the array
-            await userDocument.set({favoriteArticles: input});
-        }
-    } else {
-        //If it is first time and data dose not exist, create new one
-        input.push({ id, title, urlToImage, publishedAt });
-        await userDocument.set({favoriteArticles: input});
-    }
-    return await getFavoriteArticleByUserId(uid)
+    //update the data to the firestore
+    await userDocument.set({ favoriteArticles: await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle) });
+    // return from localStorage
+    return newLocalFavoriteArticles
 }
 
 export const removeFavoriteArticleByUserId = async (id: number | null, uid: string) => { 
-    //get the data
+    //create a data cariable for favorite articles
+    let newLocalFavoriteArticles: FavoriteArticle[] = [];
+    //get all the articles from localStorage
+    const currentLocalFavoriteArticles : FavoriteArticle[] = await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle);
+    //filter/delete the currentLocalFavoriteArticles
+    newLocalFavoriteArticles = currentLocalFavoriteArticles.filter((article: FavoriteArticle) => article.id !== id)
+    //update the newLocalFavoriteArticles to the localStorage
+    await storeLocalData(AsyncLocalStorageKeysType.FavoriteArticle, newLocalFavoriteArticles)
+    console.log(await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle))
+    //get the relevent document instance
     const userDocument = firestore().collection('Users').doc(uid);
-    const data = (await userDocument.get()).data()
-    //if first time add an empty array
-    let input: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
-    //filter the input from the removed article
-    input = input.filter((article: FavoriteArticle) => article.id !== id)
-    //update the data
-    const result = await userDocument.update({ favoriteArticles: input });
+    //update the data to the firestore
+    await userDocument.update({ favoriteArticles: newLocalFavoriteArticles });
     
-    return await getFavoriteArticleByUserId(uid)
+    return newLocalFavoriteArticles;
 }
 
 
 export const getFavoriteArticleByUserId = async (uid: string) => { 
-    //get the data
-    const userDocument = firestore().collection('Users').doc(uid);
-    const data = (await userDocument.get()).data();
-    //if the no data return empty array
-    let favoriteArticles: FavoriteArticle[] = data?.favoriteArticles ? data?.favoriteArticles : [];
-
-    return favoriteArticles;
+    let currentLocalFavoriteArticles: FavoriteArticle[] = [];
+    currentLocalFavoriteArticles = await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle);
+    console.log("is current ", currentLocalFavoriteArticles)
+    return currentLocalFavoriteArticles;
 }

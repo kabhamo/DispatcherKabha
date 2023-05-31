@@ -4,8 +4,9 @@ import { DispatcherFavArticleCard } from '../components/FavoriteScreenComponents
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { FavoriteScreenNavigationProp } from '../routes/types/navigationTypes';
-import { getFavoriteArticles } from '../state/favoriteArticles/favoriteArticlesSlice';
+import { fetchFavoriteArticles, getFavoriteArticles, removeFavoriteArticles } from '../state/favoriteArticles/favoriteArticlesSlice';
 import { colors } from '../util/colors';
+import { FavoriteArticle } from '../util/types';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -23,6 +24,11 @@ export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigat
             .catch((ex) => console.log(ex))
     }, [])
 
+    //depend on the icon state fetch favoriteArticle or remove from firestore
+    const onStarClick = async (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => {
+        !isFavoriteArticle && await dispatch(removeFavoriteArticles(favoriteArticle.id)).unwrap()
+    }
+
     return (
         <SafeAreaView style={styles.mainContainer}>
 
@@ -37,13 +43,17 @@ export const FavoriteScreen: React.FC<FavoriteScreenNavigationProp> = ({ navigat
                 </View>
 
                 <View style={styles.scrollViewContainer}>
-                    {favoriteArticles.length > 0 ? <ScrollView>
+                    {favoriteArticles && favoriteArticles.length > 0 ? <ScrollView>
                         {favoriteArticles.map((article, index) => (
                             <TouchableOpacity
                                 key={index}
                                 onPress={() => console.log("Fav Article, Navigate to Article")}
                                 style={styles.scrollViewItemContainer}>
-                                <DispatcherFavArticleCard key={index} data={article} />
+                                <DispatcherFavArticleCard
+                                    key={index}
+                                    data={article}
+                                    //index={index}
+                                    onStarClick={onStarClick} />
                             </TouchableOpacity>
                         ))}
                     </ScrollView>

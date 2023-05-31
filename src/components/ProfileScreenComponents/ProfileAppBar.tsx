@@ -3,20 +3,23 @@ import React from 'react'
 import { AppBar, Avatar, HStack } from '@react-native-material/core';
 import { colors } from '../../util/colors';
 import Icon from 'react-native-vector-icons/Feather';
+import { ProfileTab } from '../../util/types';
 
 
 //todo make custom logic to the avatar picture
 //todo "edit my profile btn make it's height big"
-type ProfileAppBarProps = {}
+type ProfileAppBarProps = {
+    onEditProfilePress: ({ id, name }: ProfileTab) => Promise<void>
+}
 
-export const ProfileAppBar: React.FC<ProfileAppBarProps> = ({ }) => {
+export const ProfileAppBar: React.FC<ProfileAppBarProps> = ({ onEditProfilePress }: ProfileAppBarProps) => {
     return (
         <AppBar style={styles.InnerBarContainer}
             leading={(props) => (
                 <HStack >
                     <TouchableOpacity
                         style={styles.btnTextContainer}
-                        onPress={() => console.log("Edit my profile")}
+                        onPress={() => onEditProfilePress({ id: 4, name: "edit" })}
                     >
                         <Text style={styles.titleText}>Hi User</Text>
                         <Text style={styles.editText}>Edit my profile</Text>

@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import { AsyncLocalStorageKeysType, ErrorFirebaseAuthEnum } from '../util/enums';
 import type { UserCredential } from '../util/types';
-import { getData, storeData } from './asyncStorage';
+import { getLocalData, storeLocalData } from './asyncStorage';
 
 export const signUpAndSetUserCredential = async (email: string, password: string, rePassword?: string) => { 
     if (rePassword && password !== rePassword) {
@@ -32,12 +32,12 @@ export const signUpAndSetUserCredential = async (email: string, password: string
         }
     }
     
-    await storeData(AsyncLocalStorageKeysType.UserAuthKey, payloadUserCredential);
-    const isOnBoarding = await getData(AsyncLocalStorageKeysType.OnBoardingKey)
+    await storeLocalData(AsyncLocalStorageKeysType.UserAuthKey, payloadUserCredential);
+    const isOnBoarding = await getLocalData(AsyncLocalStorageKeysType.OnBoardingKey)
     if (isOnBoarding === null) {
-        await storeData(AsyncLocalStorageKeysType.OnBoardingKey, true);
+        await storeLocalData(AsyncLocalStorageKeysType.OnBoardingKey, true);
     } else { 
-        await storeData(AsyncLocalStorageKeysType.OnBoardingKey, false);
+        await storeLocalData(AsyncLocalStorageKeysType.OnBoardingKey, false);
     }
     return payloadUserCredential;
 }

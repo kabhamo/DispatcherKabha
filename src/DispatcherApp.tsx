@@ -9,7 +9,7 @@ import AppDrawer from './routes/AppDrawer';
 import type { RootStackParamList } from "./routes/types/navigationTypes";
 import { OnBoarding } from "./screens/OnBoardingScreen";
 import { colors } from "./util/colors";
-import { getData, storeData } from './services/asyncStorage';
+import { getLocalData, storeLocalData } from './services/asyncStorage';
 import { AsyncLocalStorageKeysType } from './util/enums';
 
 
@@ -17,21 +17,17 @@ import { AsyncLocalStorageKeysType } from './util/enums';
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 function DispatcherApp(): JSX.Element {
-    //const user = useAppSelector(state => state.user.value)
     const [isOnBoarding, setIsOnBoarding] = useState<boolean>(false);
 
-    //useEffect(() => {
-    //    SplashScreen.hide();
-    //}, [])
 
     // todo: check the onBoarding logics condition - first Auth or OnBoarding ? 
     useEffect(() => {
         async function onBoarding() {
             try {
-                const appData = await getData(AsyncLocalStorageKeysType.OnBoardingKey);
+                const appData = await getLocalData(AsyncLocalStorageKeysType.OnBoardingKey);
                 if (appData) {
                     setIsOnBoarding(true);
-                    storeData(AsyncLocalStorageKeysType.OnBoardingKey, false);
+                    storeLocalData(AsyncLocalStorageKeysType.OnBoardingKey, false);
                 } else {
                     setIsOnBoarding(false);
                 }
@@ -42,8 +38,6 @@ function DispatcherApp(): JSX.Element {
         }
         onBoarding();
     }, [isOnBoarding])
-
-    1
     return (
         <View style={{ flex: 1 }}>
             <NavigationContainer>

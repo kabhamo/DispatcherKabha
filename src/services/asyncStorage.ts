@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const USER_AUTH_KEY: string = '@userAuthKey';
-export const storeData = async (key: string, value: any) => {
+export const storeLocalData = async (key: string, value: any) => {
     try {
         const stringifyValue = JSON.stringify(value)
         await AsyncStorage.setItem(key, stringifyValue)
@@ -13,7 +13,7 @@ export const storeData = async (key: string, value: any) => {
 }
 
 
-export const getData = async (key: string) => {
+export const getLocalData = async (key: string) => {
     try {
       const jsonValue = await AsyncStorage.getItem(key)
       return jsonValue != null ? JSON.parse(jsonValue) : null;
@@ -23,7 +23,7 @@ export const getData = async (key: string) => {
     }
 }
 
-export const removeValue = async (key: string) => {
+export const removeLocalValue = async (key: string) => {
     try {
       await AsyncStorage.removeItem(key)
     } catch(ex) {

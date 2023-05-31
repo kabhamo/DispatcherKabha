@@ -4,16 +4,16 @@ import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../../util/colors';
 import { ArticleResponse, FavoriteArticle } from '../../util/types';
 import { DispatcherArticleButton } from './DispatcherArticleButton';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 type DispatcherArticleCardProps = {
     data: ArticleResponse,
     index: number,
-    //isFavoriteArticle: boolean,
-    //setFavoriteArticle: React.Dispatch<React.SetStateAction<boolean>>,
     onStarClick: (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => Promise<void>
 }
 
-const { width, height } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('screen');
+
 export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, index, onStarClick }) => {
     const [isFavoriteArticle, setFavoriteArticle] = useState<boolean>(false);
     const [date, setDate] = useState<Date>(new Date())
@@ -29,7 +29,8 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
                 id: index,
                 title: data.title,
                 urlToImage: data.urlToImage,
-                publishedAt: data.publishedAt
+                publishedAt: data.publishedAt,
+                isFavoriteArticle: !isFavoriteArticle
             },
             isFavoriteArticle
         )
@@ -137,15 +138,3 @@ const styles = StyleSheet.create({
         left: '88%',
     }
 })
-
-/*
-close: {
-    margin: 5,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: 25,
-    height: 25,
-    color: "tomato"
-  }
-*/

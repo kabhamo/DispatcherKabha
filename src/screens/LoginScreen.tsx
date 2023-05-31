@@ -98,11 +98,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
               onPress={() => navigation.navigate('Auth', { screen: 'Signup' })} />
           </>
         }
-
       </View>
-
-
-
     </View>
   )
 }

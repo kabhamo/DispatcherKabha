@@ -7,6 +7,7 @@
     "reset": "npx react-native start --reset-cache",
     "ios": "react-native run-ios",
     "ios-device": "npx react-native run-ios --device 'Kabha Iphone' ",
+    "ios:clean": "cd ios && xcodebuild clean && rm -rf ~/Library/Caches/CocoaPods && rm -rf Pods && rm -rf ~/Library/Developer/Xcode/DerivedData/* && pod cache clean --all && pod deintegrate && pod setup && pod install && cd ..",
     "android": "source ~/.bash_profile&&react-native run-android",
     "postinstall": "npx typesync",
     "lint": "eslint .",

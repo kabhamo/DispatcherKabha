@@ -8,7 +8,7 @@ import { colors } from '../../util/colors'
 import { LoadingStatus, ProfileTabs } from '../../util/enums'
 import { ProfileTab } from '../../util/types'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { logoutUserAndNavigate } from '../../state/user/userSlice'
+import { logoutUserAndNavigate } from '../../store/user/userSlice'
 
 type ProfileScreenProps = {}
 

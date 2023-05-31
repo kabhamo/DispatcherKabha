@@ -7,7 +7,7 @@ import { DispatcherFilterBar } from '../components/HomeScreenComponents/Dispatch
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
 import { getLocalData, removeLocalValue, storeLocalData } from '../services/asyncStorage';
-import { fetchFavoriteArticles, removeFavoriteArticles } from "../state/favoriteArticles/favoriteArticlesSlice";
+import { fetchFavoriteArticles, removeFavoriteArticles } from "../store/favoriteArticles/favoriteArticlesSlice";
 import { colors } from '../util/colors';
 import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';

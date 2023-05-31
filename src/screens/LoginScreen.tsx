@@ -6,7 +6,7 @@ import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInp
 import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
-import { fetchUserCredential } from '../state/user/userSlice';
+import { fetchUserCredential } from '../store/user/userSlice';
 import { colors } from '../util/colors';
 import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
 import { SerializedError } from '../util/types';

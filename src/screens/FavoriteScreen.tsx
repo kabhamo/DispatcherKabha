@@ -4,7 +4,7 @@ import { DispatcherFavArticleCard } from '../components/FavoriteScreenComponents
 import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { FavoriteScreenNavigationProp } from '../routes/types/navigationTypes';
-import { fetchFavoriteArticles, getFavoriteArticles, removeFavoriteArticles } from '../state/favoriteArticles/favoriteArticlesSlice';
+import { fetchFavoriteArticles, getFavoriteArticles, removeFavoriteArticles } from '../store/favoriteArticles/favoriteArticlesSlice';
 import { colors } from '../util/colors';
 import { FavoriteArticle } from '../util/types';
 

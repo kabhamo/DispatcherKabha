@@ -73,7 +73,7 @@ export type TermsNavigationProp =
             NativeStackScreenProps<RootStackParamList>
         >
     >    
-    
+
 export type SettingsNavigationProp =
     CompositeScreenProps<
         NativeStackScreenProps<ProfileStackParamList, 'Settings'>,

@@ -1,27 +1,31 @@
 import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
-import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
-import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
-import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
-import { fetchUserCredential } from '../store/user/userSlice';
-import { colors } from '../util/colors';
-import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
-import { SerializedError } from '../util/types';
-import crashlytics from '@react-native-firebase/crashlytics';
-import SplashScreen from 'react-native-splash-screen';
+import {
+  Dimensions,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text, View
+} from 'react-native';
+import DispatcherButton from '../../components/AuthScreenComponents/DispatcherButton';
+import { EmailInputComponent } from '../../components/AuthScreenComponents/EmailInputComponent';
+import { PasswordInputComponent } from '../../components/AuthScreenComponents/PasswordInputComponent';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { SignupScreenNavigationProp } from '../../routes/types/navigationTypes';
+import { fetchUserCredential } from '../../store/user/userSlice';
+import { colors } from '../../util/colors';
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../../util/enums';
+import { SerializedError } from '../../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
-const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }: LoginScreenNavigationProp) => {
-
+const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route }: SignupScreenNavigationProp) => {
   const [visibility, setVisibility] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [rePassword, setRePassword] = useState<string>("");
   const [error, setError] = useState<SerializedError | null>(null);
-  //? ============Redux============
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.user)
 
@@ -31,14 +35,15 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
     }
   }, [user])
 
-  const loginHandler = async () => {
+  const signinHandler = async () => {
     try {
-      await dispatch(fetchUserCredential({ email, password })).unwrap()
+      await dispatch(fetchUserCredential({ email, password, rePassword })).unwrap()
       navigation.navigate('OnBoarding');
     } catch (ex) {
-      console.log("Error at loginHandler ", ex)
+      console.log("Error at signinHandler ", ex)
     }
   }
+
 
   return (
     <View style={styles.container}>
@@ -48,13 +53,14 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
       <View style={styles.imageContainer} >
         <Image
           style={styles.topImage}
-          source={require('../assets/LoginImage.png')}
+          source={require('../../assets/LoginImage.png')}
         />
-        <Text style={styles.text}> Login </Text>
+        <Text style={styles.text}> Signup </Text>
+
+
       </View>
 
-      <KeyboardAvoidingView behavior="padding" style={styles.inputsContainer} >
-
+      <KeyboardAvoidingView behavior="padding" style={styles.inputsContainer}  >
         <EmailInputComponent
           placeholder='Your email'
           error={error}
@@ -69,36 +75,43 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
           setRePassword={() => ""}
           error={error}
         />
-
+        <PasswordInputComponent
+          placeholder={PasswordEnum.ReinterPassword}
+          type={PasswordEnum.ReinterPassword}
+          visibility={visibility}
+          setVisibility={setVisibility}
+          setPassword={() => ""}
+          setRePassword={setRePassword}
+          error={error}
+        />
         <View style={styles.line}></View>
         {error &&
           (error.code === ErrorFirebaseAuthEnum.InvalidOperation ||
             error.code === ErrorFirebaseAuthEnum.NetworkError ||
             error.code === ErrorFirebaseAuthEnum.RequestsExceeded) ?
           <Text style={styles.error}>{error.message}</Text> : null}
+
       </KeyboardAvoidingView>
-
-
 
       <View style={styles.btnsContainer}>
         {user.loading === LoadingStatus.Pending ?
-          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+          <Lottie source={require('../../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>
             <DispatcherButton
-              title="LOGIN"
+              title="SIGNUP"
               backgroundColorStyleType={{ backgroundColor: colors.primaryBlue }}
               textColorStyleType={{ color: colors.white }}
-              onPress={() => loginHandler()} />
-
+              onPress={() => signinHandler()} />
             <DispatcherButton
-              title="SIGNUP"
+              title="LOGIN"
               backgroundColorStyleType={{ backgroundColor: colors.gray }}
               textColorStyleType={{ color: colors.primaryBlackTwo }}
-              onPress={() => navigation.navigate('Auth', { screen: 'Signup' })} />
+              onPress={() => navigation.navigate('Auth', { screen: 'Login' })} />
           </>
         }
       </View>
+
     </View>
   )
 }
@@ -108,23 +121,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputsContainer: {
-    flex: 6,
+    flex: 8,
     justifyContent: 'center',
     alignItems: "center",
-    gap: 20,
-    //backgroundColor: 'darkorange',
+    gap: 15,
   },
   btnsContainer: {
     flex: 3,
     alignItems: "center",
     justifyContent: 'center',
     gap: 20,
-    //backgroundColor: 'green',
   },
   imageContainer: {
     flex: 5,
     alignItems: 'flex-start',
-    gap: 12,
+    gap: 10,
   },
   topImage: {
     width: '100%',
@@ -155,4 +166,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginScreen
+export default SignupScreen

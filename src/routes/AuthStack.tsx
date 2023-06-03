@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '../screens/LoginScreen';
-import SignupScreen from '../screens/SignupScreen';
+import LoginScreen from '../screens/AuthStackSreens/LoginScreen';
+import SignupScreen from '../screens/AuthStackSreens/SignupScreen';
 import { colors } from '../util/colors';
 import { AuthParamList } from './types/navigationTypes';
 

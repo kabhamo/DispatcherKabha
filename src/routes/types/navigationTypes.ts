@@ -28,9 +28,6 @@ export type SignupScreenNavigationProp = CompositeScreenProps<
 
 export type DrawerParamList = { 
     SearchIn: NavigatorScreenParams<BottomTabsParamList>; //tabs
-    Sources: undefined;
-    Language: undefined;
-    Dates: undefined;
 }
 
 export type BottomTabsParamList = {
@@ -45,11 +42,6 @@ export type HomeScreenNavigationProp = CompositeScreenProps<
     DrawerScreenProps<DrawerParamList>,
     NativeStackScreenProps<RootStackParamList>
     >>;
-
-//export type ProfileScreenNavigationProp = CompositeScreenProps<
-//    BottomTabScreenProps<BottomTabsParamList,'ProfileStack'>,
-//    NativeStackScreenProps<RootStackParamList>
-//    >;  
 
 export type FavoriteScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabsParamList,'Favorite'>,
@@ -81,6 +73,7 @@ export type TermsNavigationProp =
             NativeStackScreenProps<RootStackParamList>
         >
     >    
+    
 export type SettingsNavigationProp =
     CompositeScreenProps<
         NativeStackScreenProps<ProfileStackParamList, 'Settings'>,
@@ -90,12 +83,12 @@ export type SettingsNavigationProp =
         >
     >    
 
-    export type MyProfileNavigationProp =
+export type MyProfileNavigationProp =
+CompositeScreenProps<
+    NativeStackScreenProps<ProfileStackParamList, 'MyProfile'>,
     CompositeScreenProps<
-        NativeStackScreenProps<ProfileStackParamList, 'MyProfile'>,
-        CompositeScreenProps<
-            BottomTabScreenProps<BottomTabsParamList>,
-            NativeStackScreenProps<RootStackParamList>
-        >
-    >   
+        BottomTabScreenProps<BottomTabsParamList>,
+        NativeStackScreenProps<RootStackParamList>
+    >
+>   
 

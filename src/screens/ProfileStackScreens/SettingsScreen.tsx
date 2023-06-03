@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import { SettingsSearchResult } from '../../components/ProfileScreenComponents/SettingsSearchResult';
 import { colors } from '../../util/colors';

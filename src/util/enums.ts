@@ -22,7 +22,7 @@ export enum AsyncLocalStorageKeysType {
     ArticlesKey = "@articles",
     FavoriteArticle = "@favoriteArticles"
 }
-//'idle' | 'pending' | 'succeeded' | 'failed';
+
 export enum LoadingStatus { 
     Idle = 'Idle',
     Pending = 'Pending',
@@ -45,4 +45,17 @@ export enum ArticleCategory {
     Science = 'science',
     Sports = 'sports',
     Technology = 'technology'
+}
+
+
+export enum SourcesDrawerOptionsEnum {
+    CBS = 'CBS',
+    NBC = 'NBC',
+    Ynet = 'Ynet'
+}
+
+export enum LanguageDrawerOptionsEnum {
+    EN = 'english',
+    AR = 'arabic',
+    HE = 'hebrew'
 }

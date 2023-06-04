@@ -2,14 +2,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from "react";
 import { View } from "react-native";
-import SplashScreen from "react-native-splash-screen";
-import { useAppSelector } from "./hooks/reduxHooks";
-import AuthStack from "./routes/AuthStack";
 import AppDrawer from './routes/AppDrawer';
+import AuthStack from "./routes/AuthStack";
 import type { RootStackParamList } from "./routes/types/navigationTypes";
 import { OnBoarding } from "./screens/OnBoardingScreen";
-import { colors } from "./util/colors";
 import { getLocalData, storeLocalData } from './services/asyncStorage';
+import { colors } from "./util/colors";
 import { AsyncLocalStorageKeysType } from './util/enums';
 
 

@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
 import AppTabs from './AppTabs';
-import { CustomDrawerContent } from './CustomDrawerItems/CustomDrawerContent';
+import { CustomDrawerContent } from './CustomDrawerComponents/CustomDrawerContent';
 import { DrawerParamList } from './types/navigationTypes';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();

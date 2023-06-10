@@ -7,14 +7,14 @@ import { FavoriteArticle, UserCredential } from '../util/types';
 
 //Get the uid from the asyncStorage and get/create a document named uid
 //finally, push the favorite article input to uid-document inside favoriteArticles array field
-export const addFavoriteArticleByUserId = async ({ id, title, urlToImage, publishedAt }: FavoriteArticle, uid: string) => {
+export const addFavoriteArticleByUserId = async ({ id, title, urlToImage, publishedAt, isFavoriteArticle }: FavoriteArticle, uid: string) => {
     //create a data cariable for favorite articles
     const newLocalFavoriteArticles: FavoriteArticle[] = [];
     //get all the favorite articles
     const currentLocalFavoriteArticles = await getLocalData(AsyncLocalStorageKeysType.FavoriteArticle);
     const dataToAdd = currentLocalFavoriteArticles ? currentLocalFavoriteArticles : [];
     newLocalFavoriteArticles.push(...dataToAdd)
-    newLocalFavoriteArticles.push({ id, title, urlToImage, publishedAt })
+    newLocalFavoriteArticles.push({ id, title, urlToImage, publishedAt, isFavoriteArticle })
     //save the favArticle to the localStorage
     await storeLocalData(AsyncLocalStorageKeysType.FavoriteArticle, newLocalFavoriteArticles)
         

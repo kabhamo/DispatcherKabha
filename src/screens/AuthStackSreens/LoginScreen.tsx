@@ -1,17 +1,16 @@
 import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
-import DispatcherButton from '../components/AuthScreenComponents/DispatcherButton';
-import { EmailInputComponent } from '../components/AuthScreenComponents/EmailInputComponent';
-import { PasswordInputComponent } from '../components/AuthScreenComponents/PasswordInputComponent';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import type { LoginScreenNavigationProp } from '../routes/types/navigationTypes';
-import { fetchUserCredential } from '../store/user/userSlice';
-import { colors } from '../util/colors';
-import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../util/enums';
-import { SerializedError } from '../util/types';
-import crashlytics from '@react-native-firebase/crashlytics';
-import SplashScreen from 'react-native-splash-screen';
+import DispatcherButton from '../../components/AuthScreenComponents/DispatcherButton';
+import { EmailInputComponent } from '../../components/AuthScreenComponents/EmailInputComponent';
+import { PasswordInputComponent } from '../../components/AuthScreenComponents/PasswordInputComponent';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import type { LoginScreenNavigationProp } from '../../routes/types/navigationTypes';
+import { fetchUserCredential } from '../../store/user/userSlice';
+import { colors } from '../../util/colors';
+import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../../util/enums';
+import { SerializedError, UserCredential } from '../../util/types';
+import { isOnBoarding } from '../../services/firebaseAuth';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -33,12 +32,24 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
   const loginHandler = async () => {
     try {
-      await dispatch(fetchUserCredential({ email, password })).unwrap()
-      navigation.navigate('OnBoarding');
+      await dispatch(fetchUserCredential({ email, password })).unwrap();
     } catch (ex) {
       console.log("Error at loginHandler ", ex)
     }
   }
+
+  useEffect(() => {
+    const navigateToApp = async () => {
+      if (user.userFetchloadingStatus === LoadingStatus.Succeeded) {
+        user.userFetchloadingStatus = LoadingStatus.Idle;
+        // Check if the user already seen the OnBoarding Screen
+        const showOnBoarding: boolean = await isOnBoarding()
+        showOnBoarding ? navigation.navigate('OnBoarding')
+          : navigation.navigate('Drawer', { screen: 'SearchIn', params: { screen: 'Home' } });
+      }
+    }
+    navigateToApp();
+  }, [user.userFetchloadingStatus])
 
   return (
     <View style={styles.container}>
@@ -48,7 +59,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
       <View style={styles.imageContainer} >
         <Image
           style={styles.topImage}
-          source={require('../assets/LoginImage.png')}
+          source={require('../../assets/LoginImage.png')}
         />
         <Text style={styles.text}> Login </Text>
       </View>
@@ -81,8 +92,8 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending ?
-          <Lottie source={require('../assets/jsons/loadingActivity.json')} autoPlay loop />
+        {user.userFetchloadingStatus === LoadingStatus.Pending ?
+          <Lottie source={require('../../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>
             <DispatcherButton

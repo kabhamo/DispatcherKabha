@@ -13,7 +13,9 @@ prepare_react_native_project!
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
+
 flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -21,14 +23,14 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-$RNFirebaseAsStaticFramework = true
-$RNFirebaseAnalyticsWithoutAdIdSupport=true
+
 
 
 target 'DispatcherKabha' do
-  config = use_native_modules!
   use_frameworks! :linkage => :static
-
+  $RNFirebaseAsStaticFramework = true
+  $RNFirebaseAnalyticsWithoutAdIdSupport=true
+  config = use_native_modules!
   # Flags change depending on the env values.
   flags = get_default_flags()
   use_react_native!(
@@ -44,6 +46,7 @@ target 'DispatcherKabha' do
     # you should disable the next line.
     #:flipper_configuration => flipper_config,
     #:flipper_configuration => FlipperConfiguration.enabled(["Debug"], { 'Flipper' => flipperkit_version, 'Flipper-Folly' => '2.6.10', 'Flipper-DoubleConversion' => '3.2.0', 'Flipper-Glog' => '0.5.0.3', 'Flipper-PeerTalk' => '0.0.4', 'OpenSSL-Universal' => '1.1.1100' }),
+    #:flipper_configuration => FlipperConfiguration.enabled(["Debug"], { 'Flipper' => '0.192.0' }),
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )

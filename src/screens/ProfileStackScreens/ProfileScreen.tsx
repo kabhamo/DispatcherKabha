@@ -31,15 +31,28 @@ const TABS: ProfileTab[] = [
 ]
 
 export const ProfileScreen: React.FC<ProfileNavigationProp> = ({ navigation, route }: ProfileNavigationProp) => {
-    const loadingStatus = useAppSelector(state => state.user)
+    const user = useAppSelector(state => state.user)
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        console.log(user.logoutLoadingStatus);
+
+        if (user.logoutLoadingStatus === LoadingStatus.Succeeded) {
+            user.logoutLoadingStatus = LoadingStatus.Idle;
+            navigation.navigate('Auth', { screen: 'Login' });
+        }
+
+        if (user.logoutLoadingStatus === LoadingStatus.Failed) {
+            // The logoutLoadingStatus is LoadingStatus.Failed
+            Alert.alert("Failed to logout", `${user.error.message} \n Please refresh the application`)
+        }
+
+    }, [user.logoutLoadingStatus]);
 
     const onPressTabHandler = async ({ id, name }: ProfileTab) => {
         switch (id) {
             case ProfileTabs.Logout:
                 await dispatch(logoutUserAndNavigate())
-                loadingStatus.loading === LoadingStatus.Succeeded && navigation.navigate('Auth', { screen: 'Login' });
-                loadingStatus.loading === LoadingStatus.Failed && Alert.alert("Failed to logout", `${loadingStatus.error.message} \n Please refresh the application`)
                 break;
             case ProfileTabs.Terms:
                 navigation.navigate('Terms')
@@ -53,7 +66,6 @@ export const ProfileScreen: React.FC<ProfileNavigationProp> = ({ navigation, rou
             default:
                 break;
         }
-
     }
 
     return (

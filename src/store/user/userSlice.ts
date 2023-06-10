@@ -24,13 +24,15 @@ export const logoutUserAndNavigate = createAsyncThunk('logoutUser/logoutUser',
 
 // Define a type for the slice state
 interface UserState {
-    loading: LoadingStatus;
+    userFetchloadingStatus: LoadingStatus;
+    logoutLoadingStatus: LoadingStatus;
     error: SerializedError;
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-    loading: LoadingStatus.Idle,
+    userFetchloadingStatus: LoadingStatus.Idle,
+    logoutLoadingStatus: LoadingStatus.Idle,
     error: {
         code: "",
         message: ""
@@ -44,24 +46,24 @@ export const userSlice = createSlice({
     extraReducers(builder) {
         //when fetch succeeded update the loading status
         builder.addCase(fetchUserCredential.fulfilled, (state, action) => {
-            state.loading = LoadingStatus.Succeeded;
+            state.userFetchloadingStatus = LoadingStatus.Succeeded;
             state.error = {code: "", message: ""}
         })
         //when fetching update the loading status
         builder.addCase(fetchUserCredential.pending, (state) => {
-            state.loading = LoadingStatus.Pending
+            state.userFetchloadingStatus = LoadingStatus.Pending
         });
         //when loggingout update the loading 
         builder.addCase(logoutUserAndNavigate.pending, (state) => {
-            state.loading = LoadingStatus.Pending
+            state.logoutLoadingStatus = LoadingStatus.Pending
         });
         //when logout fulfilled update the loading 
         builder.addCase(logoutUserAndNavigate.fulfilled, (state) => {
-            state.loading = LoadingStatus.Succeeded
+            state.logoutLoadingStatus = LoadingStatus.Succeeded
         });
         //when loggingout faild update the loading and the error state
         builder.addCase(logoutUserAndNavigate.rejected, (state, action) => {
-            state.loading = LoadingStatus.Failed
+            state.logoutLoadingStatus = LoadingStatus.Failed
             state.error = {
                 code: ErrorFirebaseAuthEnum.LogoutFailed,
                 message: action.error.message ? action.error.message : ""
@@ -70,7 +72,7 @@ export const userSlice = createSlice({
         });
         //when fetching fialed update the loading and the error state
         builder.addCase(fetchUserCredential.rejected, (state, action) => {
-            state.loading = LoadingStatus.Failed;
+            state.userFetchloadingStatus = LoadingStatus.Failed;
             if (action.error.message === ErrorFirebaseAuthEnum.UnmatchedPassword) {
                 state.error = {
                     code: ErrorFirebaseAuthEnum.UnmatchedPassword,

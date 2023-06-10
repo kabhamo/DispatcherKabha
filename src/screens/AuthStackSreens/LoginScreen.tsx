@@ -9,9 +9,8 @@ import type { LoginScreenNavigationProp } from '../../routes/types/navigationTyp
 import { fetchUserCredential } from '../../store/user/userSlice';
 import { colors } from '../../util/colors';
 import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../../util/enums';
-import { SerializedError } from '../../util/types';
-import crashlytics from '@react-native-firebase/crashlytics';
-import SplashScreen from 'react-native-splash-screen';
+import { SerializedError, UserCredential } from '../../util/types';
+import { isOnBoarding } from '../../services/firebaseAuth';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -33,12 +32,24 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
   const loginHandler = async () => {
     try {
-      await dispatch(fetchUserCredential({ email, password })).unwrap()
-      navigation.navigate('OnBoarding');
+      await dispatch(fetchUserCredential({ email, password })).unwrap();
     } catch (ex) {
       console.log("Error at loginHandler ", ex)
     }
   }
+
+  useEffect(() => {
+    const navigateToApp = async () => {
+      if (user.userFetchloadingStatus === LoadingStatus.Succeeded) {
+        user.userFetchloadingStatus = LoadingStatus.Idle;
+        // Check if the user already seen the OnBoarding Screen
+        const showOnBoarding: boolean = await isOnBoarding()
+        showOnBoarding ? navigation.navigate('OnBoarding')
+          : navigation.navigate('Drawer', { screen: 'SearchIn', params: { screen: 'Home' } });
+      }
+    }
+    navigateToApp();
+  }, [user.userFetchloadingStatus])
 
   return (
     <View style={styles.container}>
@@ -81,7 +92,7 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
 
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending ?
+        {user.userFetchloadingStatus === LoadingStatus.Pending ?
           <Lottie source={require('../../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>

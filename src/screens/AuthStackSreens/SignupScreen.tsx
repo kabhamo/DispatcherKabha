@@ -13,10 +13,11 @@ import { EmailInputComponent } from '../../components/AuthScreenComponents/Email
 import { PasswordInputComponent } from '../../components/AuthScreenComponents/PasswordInputComponent';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { SignupScreenNavigationProp } from '../../routes/types/navigationTypes';
+import { isOnBoarding } from '../../services/firebaseAuth';
 import { fetchUserCredential } from '../../store/user/userSlice';
 import { colors } from '../../util/colors';
 import { ErrorFirebaseAuthEnum, LoadingStatus, PasswordEnum } from '../../util/enums';
-import { SerializedError } from '../../util/types';
+import { SerializedError, UserCredential } from '../../util/types';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -37,12 +38,24 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
 
   const signinHandler = async () => {
     try {
-      await dispatch(fetchUserCredential({ email, password, rePassword })).unwrap()
-      navigation.navigate('OnBoarding');
+      await dispatch(fetchUserCredential({ email, password, rePassword })).unwrap();
     } catch (ex) {
       console.log("Error at signinHandler ", ex)
     }
   }
+
+  useEffect(() => {
+    const navigateToApp = async () => {
+      if (user.userFetchloadingStatus === LoadingStatus.Succeeded) {
+        user.userFetchloadingStatus = LoadingStatus.Idle;
+        // Check if the user already seen the OnBoarding Screen
+        const showOnBoarding: boolean = await isOnBoarding()
+        showOnBoarding ? navigation.navigate('OnBoarding')
+          : navigation.navigate('Drawer', { screen: 'SearchIn', params: { screen: 'Home' } });
+      }
+    }
+    navigateToApp();
+  }, [user.userFetchloadingStatus])
 
 
   return (
@@ -94,7 +107,7 @@ const SignupScreen: React.FC<SignupScreenNavigationProp> = ({ navigation, route 
       </KeyboardAvoidingView>
 
       <View style={styles.btnsContainer}>
-        {user.loading === LoadingStatus.Pending ?
+        {user.userFetchloadingStatus === LoadingStatus.Pending ?
           <Lottie source={require('../../assets/jsons/loadingActivity.json')} autoPlay loop />
           :
           <>

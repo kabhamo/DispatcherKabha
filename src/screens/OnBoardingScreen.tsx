@@ -119,11 +119,3 @@ const styles = StyleSheet.create({
     progressAnimation: {},
 
 })
-
-/*
-navigation.navigate('Nested Navigator 2', {
-    screen: 'Nested Navigator 3', params: {
-        screen: 'screen E'
-    }
-});
-*/

@@ -6,14 +6,12 @@ import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar'
 import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
-import { getLocalData, removeLocalValue, storeLocalData } from '../services/asyncStorage';
+import { getArticles } from "../services/articlesAPI";
+import { getLocalData, storeLocalData } from '../services/asyncStorage';
 import { fetchFavoriteArticles, removeFavoriteArticles } from "../store/favoriteArticles/favoriteArticlesSlice";
 import { colors } from '../util/colors';
-import { ARTICLES } from '../util/constants';
 import { AsyncLocalStorageKeysType } from '../util/enums';
 import { ArticleResponse, FavoriteArticle } from "../util/types";
-import { getArticles } from "../services/articlesAPI";
-import { getFavoriteArticleByUserId, removeFavoriteArticleByUserId } from "../services/cloudFirestore";
 
 const { width, height } = Dimensions.get('screen')
 
@@ -49,7 +47,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
   useEffect(() => {
     const getDateTime = async () => {
       const result = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
-      setDateTime(result.lastLogin);
+      setDateTime(result?.lastLogin ? result.lastLogin : new Date().toUTCString());
     }
     getDateTime()
   }, [])

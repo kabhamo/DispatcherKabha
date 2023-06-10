@@ -1,3 +1,4 @@
+import { SourcesDrawerOptionsEnum, LanguageDrawerOptionsEnum } from "./enums";
 
 export interface ErrorType {
     code?: string;
@@ -45,3 +46,14 @@ export type ProfileTab = {
     icon?: JSX.Element
 }
 
+export type DrawerItemType = {
+    label: string,
+}
+
+export type CompositeCurrentOptionType = 'All' | SourcesDrawerOptionsEnum | LanguageDrawerOptionsEnum
+    
+export type DrawerListItem = {
+    drawer: DrawerItemType,
+    currentOptionState: CompositeCurrentOptionType,
+    drawerOptions: SourcesDrawerOptionsEnum[] | LanguageDrawerOptionsEnum[],
+}

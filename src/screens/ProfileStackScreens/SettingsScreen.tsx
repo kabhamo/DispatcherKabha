@@ -1,14 +1,14 @@
-import { View, Text, StyleSheet, Platform, Dimensions, } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
+import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
+import { SettingsSearchResult } from '../../components/ProfileScreenComponents/SettingsSearchResult';
 import { colors } from '../../util/colors';
 
-type SettingsScreenProps = {
-
-}
+type SettingsScreenProps = {}
 
 const { height, width } = Dimensions.get('screen');
 
-export const SettingsScreen: React.FC<SettingsScreenProps> = ({ }) => {
+export const SettingsScreen: React.FC = () => {
+
     return (
         <View style={styles.mainContainer}>
 
@@ -16,18 +16,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ }) => {
                 <Text style={styles.title}>Settings</Text>
             </View>
 
-            <View style={styles.searchResultsContainer}>
-                <View style={styles.titleInnerContainer}>
-                    <Text style={styles.searchResultsTitle}>Search Results</Text>
-                    <View style={styles.line}></View>
-                </View>
-                <View style={styles.saveFiltersInnerContainer}>
-                    {/* Save filters CheckBox */}
-                </View>
-                <View style={styles.saveSearchResultsInnerContainer}>
-                    {/* Save search results CheckBox */}
-                </View>
-            </View>
+            <SettingsSearchResult />
 
             <View style={styles.appPreferencesContainer}>
 
@@ -38,6 +27,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ }) => {
 
                 <View style={styles.notificationContainer}>
                     {/* Notification CheckBox */}
+
                 </View>
 
                 <View style={styles.languageContainer}>
@@ -61,13 +51,23 @@ const styles = StyleSheet.create({
         paddingLeft: '3%',
     },
     searchResultsContainer: {
-        flex: 10,
+        flex: 8,
         paddingLeft: '3%',
         //backgroundColor: 'pink'
     },
     titleInnerContainer: {},
-    saveFiltersInnerContainer: {},
-    saveSearchResultsInnerContainer: {},
+    saveFiltersInnerContainer: {
+        flex: 1,
+        paddingTop: 10,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
+    saveSearchResultsInnerContainer: {
+        flex: 1,
+        paddingTop: 10,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    },
     appPreferencesContainer: {
         flex: 6,
         paddingLeft: '3%',
@@ -100,5 +100,17 @@ const styles = StyleSheet.create({
         width: 0.88 * width,
         height: 2,
         marginTop: '5%',
+    },
+    innerText: {
+        fontSize: 17,
+        fontWeight: '500',
+        //paddingTop: '3%',
+        color: colors.primaryBlack,
+        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
+    },
+    innerDescText: {
+        fontSize: 15,
+        color: colors.grayDark,
+        fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Arial',
     },
 })

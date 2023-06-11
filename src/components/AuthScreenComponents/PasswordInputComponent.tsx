@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
         width: "87%",
         paddingVertical: 11,
         borderRadius: 4,
+        backgroundColor: "#FFFFFF",
     },
     error: {
         color: colors.error,

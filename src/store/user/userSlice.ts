@@ -46,6 +46,7 @@ export const userSlice = createSlice({
     extraReducers(builder) {
         //when fetch succeeded update the loading status
         builder.addCase(fetchUserCredential.fulfilled, (state, action) => {
+            console.log("User fulfilled")
             state.userFetchloadingStatus = LoadingStatus.Succeeded;
             state.error = {code: "", message: ""}
         })

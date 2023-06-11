@@ -2,6 +2,7 @@ import { CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/n
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { DrawerScreenProps } from "@react-navigation/drawer";
+import { Article } from "../../util/types";
 
 export type RootStackParamList = {
     Auth: NavigatorScreenParams<AuthParamList>;
@@ -31,23 +32,38 @@ export type DrawerParamList = {
 }
 
 export type BottomTabsParamList = {
-    Home: undefined;
+    HomeStack: NavigatorScreenParams<HomeStackParamList>;
     ProfileStack: NavigatorScreenParams<ProfileStackParamList>;
     Favorite: undefined;
 }
-
-export type HomeScreenNavigationProp = CompositeScreenProps<
-    BottomTabScreenProps<BottomTabsParamList, 'Home'>,
-    CompositeScreenProps<
-    DrawerScreenProps<DrawerParamList>,
-    NativeStackScreenProps<RootStackParamList>
-    >>;
 
 export type FavoriteScreenNavigationProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabsParamList,'Favorite'>,
     NativeStackScreenProps<RootStackParamList>
     >; 
 
+export type HomeStackParamList = {
+    Home: undefined;
+    Artical: {article: Article};
+}
+
+export type HomeScreenNavigationProp =
+    CompositeScreenProps<
+        NativeStackScreenProps<HomeStackParamList, 'Home'>,
+        CompositeScreenProps<
+        DrawerScreenProps<DrawerParamList>,
+            NativeStackScreenProps<RootStackParamList>
+        >
+    >
+    
+export type ArticalScreenNavigationProp =
+CompositeScreenProps<
+    NativeStackScreenProps<HomeStackParamList, 'Artical'>,
+    CompositeScreenProps<
+        DrawerScreenProps<DrawerParamList>,
+        NativeStackScreenProps<RootStackParamList>
+    >
+>
 
 export type ProfileStackParamList = {
     Settings: undefined;

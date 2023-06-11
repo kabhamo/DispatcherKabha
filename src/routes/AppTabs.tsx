@@ -1,11 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen } from '../screens/HomeScreen';
-import type { BottomTabsParamList } from './types/navigationTypes';
-import { FavoriteScreen } from '../screens/FavoriteScreen';
-import { ProfileScreen } from '../screens/ProfileStackScreens/ProfileScreen';
-import { colors } from '../util/colors';
 import Icon from 'react-native-vector-icons/Feather';
-import ProfileStackScreens from './TabsStackNavigation/ProfileStackNav';
+import { FavoriteScreen } from '../screens/FavoriteScreen';
+import { colors } from '../util/colors';
+import HomeStackNavigator from './TabsStackNavigation/HomeStackNavigator';
+import ProfileStackNavigator from './TabsStackNavigation/ProfileStackNavigator';
+import type { BottomTabsParamList } from './types/navigationTypes';
 
 
 const Tab = createBottomTabNavigator<BottomTabsParamList>();
@@ -13,7 +12,7 @@ const Tab = createBottomTabNavigator<BottomTabsParamList>();
 function AppTabs(): JSX.Element {
     return (
         <Tab.Navigator
-            initialRouteName='Home'
+            initialRouteName='HomeStack'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -25,7 +24,7 @@ function AppTabs(): JSX.Element {
         >
             <Tab.Screen
                 name="ProfileStack"
-                component={ProfileStackScreens}
+                component={ProfileStackNavigator}
                 options={{
                     tabBarIcon: (e) => (
                         <Icon
@@ -36,8 +35,8 @@ function AppTabs(): JSX.Element {
                     )
                 }} />
             <Tab.Screen
-                name="Home"
-                component={HomeScreen}
+                name="HomeStack"
+                component={HomeStackNavigator}
                 options={{
                     tabBarIcon: (e) => (
                         <Icon

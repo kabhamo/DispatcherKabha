@@ -1,20 +1,21 @@
+import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../../util/colors';
-import { ArticleResponse, FavoriteArticle } from '../../util/types';
+import { Article, FavoriteArticle } from '../../util/types';
 import { DispatcherArticleButton } from './DispatcherArticleButton';
-import { useAppSelector } from '../../hooks/reduxHooks';
 
 type DispatcherArticleCardProps = {
-    data: ArticleResponse,
+    data: Article,
     index: number,
+    onPress: (article: Article) => void
     onStarClick: (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => Promise<void>
 }
 
 const { width, height } = Dimensions.get('screen');
 
-export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, index, onStarClick }) => {
+export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ data, index, onStarClick, onPress }) => {
     const [isFavoriteArticle, setFavoriteArticle] = useState<boolean>(false);
     const [date, setDate] = useState<Date>(new Date())
 
@@ -39,7 +40,10 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
         <View style={styles.mainContainer}>
 
             <View style={styles.imageContainer}>
-                <Image style={[styles.imageContainer, { height: height * 0.21 }]} source={{ uri: data.urlToImage }} />
+                {data.urlToImage ?
+                    <Image style={[styles.imageContainer, { height: height * 0.21 }]} source={{ uri: data.urlToImage }} />
+                    : <Image style={[styles.imageContainer, { height: height * 0.21, alignSelf: 'center' }]} source={require('../../assets/ios/LOGO.png')} />}
+
                 <TouchableOpacity
                     style={styles.close}
                     onPress={() => onPressHandler()}>
@@ -60,7 +64,7 @@ export const DispatcherArticleCard: React.FC<DispatcherArticleCardProps> = ({ da
                 <View style={[styles.btnContainer]}>
                     <DispatcherArticleButton
                         title='NAVIGATE TO DISPATCH'
-                        onPress={() => console.log("NAVIGATE")} />
+                        onPress={() => onPress(data)} />
                 </View>
             </View>
 
@@ -85,7 +89,7 @@ const styles = StyleSheet.create({
         //flex: 4,
         borderTopLeftRadius: 19,
         borderTopRightRadius: 19,
-        backgroundColor: '#B799FF',
+        backgroundColor: colors.primaryBlack,
     },
     dateTitleSourceContainer: {
         //flex: 3,

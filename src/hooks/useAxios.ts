@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios, { AxiosResponse } from 'axios'
-import { ArticleResponse } from "../util/types";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 import { getConfig } from "../../config/config";
+import { Article } from "../util/types";
 
 axios.defaults.baseURL = getConfig().general.baseURL;
 
@@ -14,7 +14,7 @@ type AxiosProps = {
     headers?: string
 }
 const useAxios = ({ url, method, body, headers } : AxiosProps) => { 
-    const [response, setResponse] = useState<ArticleResponse[] | null>(null);
+    const [response, setResponse] = useState<Article[] | null>(null);
     const [error, setError] = useState('');
     const [loading, setloading] = useState(true);
 
@@ -22,7 +22,7 @@ const useAxios = ({ url, method, body, headers } : AxiosProps) => {
         try {
             //? should be more dynamic
             //? Add AxiosResponse 
-            const response: ArticleResponse[] = (await axios[method](url)).data['articles'];
+            const response: Article[] = (await axios[method](url)).data['articles'];
             if (response) { 
                 setResponse(response)
             }

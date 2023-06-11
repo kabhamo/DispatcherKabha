@@ -1,5 +1,5 @@
 import { ImageProps } from 'react-native';
-import { ArticleResponse, DrawerListItem } from './types';
+import { Article, DrawerListItem } from './types';
 import { SourcesDrawerOptionsEnum, LanguageDrawerOptionsEnum } from './enums';
 
 // todo make sure u understan the Pick

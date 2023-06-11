@@ -1,8 +1,6 @@
 import axios from "axios";
 import { getConfig } from "../../config/config";
-import { ArticleCategory, AsyncLocalStorageKeysType } from "../util/enums";
-import { ArticleResponse } from "../util/types";
-import { storeLocalData } from "./asyncStorage";
+import { Article } from "../util/types";
 
 const { apiKey, baseURL } = getConfig().general;
 
@@ -16,7 +14,7 @@ export const getArticles = async() => {
     try {
         //get the data from api
         const response = await axiosInstance.get(`/top-headlines?apiKey=${apiKey}&pageSize=${ARTICLES_NUMBER}&country=us`);
-        const arrayArticles: ArticleResponse[] = response.data?.articles;
+        const arrayArticles: Article[] = response.data?.articles;
         return arrayArticles;
     } catch (ex) { 
         console.log("error getArticles: ", ex)

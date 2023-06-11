@@ -1,15 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import type { ProfileStackParamList } from '../types/navigationTypes';
-import { TermsScreen } from '../../screens/ProfileStackScreens/TermsScreen';
-import { SettingsScreen } from '../../screens/ProfileStackScreens/SettingsScreen';
-import { ProfileScreen } from '../../screens/ProfileStackScreens/ProfileScreen';
 import { MyProfileScreen } from '../../screens/ProfileStackScreens/MyProfileScreen';
+import { ProfileScreen } from '../../screens/ProfileStackScreens/ProfileScreen';
+import { SettingsScreen } from '../../screens/ProfileStackScreens/SettingsScreen';
+import { TermsScreen } from '../../screens/ProfileStackScreens/TermsScreen';
 import { colors } from '../../util/colors';
+import type { ProfileStackParamList } from '../types/navigationTypes';
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
 
-function ProfileStackScreens(): JSX.Element {
+function ProfileStackNavigator(): JSX.Element {
 
     return (
         <ProfileStack.Navigator
@@ -26,4 +25,4 @@ function ProfileStackScreens(): JSX.Element {
     )
 }
 
-export default ProfileStackScreens
+export default ProfileStackNavigator

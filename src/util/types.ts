@@ -10,7 +10,7 @@ export interface SerializedError {
     code: string
 }
 
-export type ArticleResponse = {
+export type Article = {
     source: {
     id: string | null,
     name: string | null

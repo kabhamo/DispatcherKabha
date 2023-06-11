@@ -41,11 +41,17 @@ const LoginScreen: React.FC<LoginScreenNavigationProp> = ({ navigation, route }:
   useEffect(() => {
     const navigateToApp = async () => {
       if (user.userFetchloadingStatus === LoadingStatus.Succeeded) {
-        user.userFetchloadingStatus = LoadingStatus.Idle;
         // Check if the user already seen the OnBoarding Screen
         const showOnBoarding: boolean = await isOnBoarding()
         showOnBoarding ? navigation.navigate('OnBoarding')
-          : navigation.navigate('Drawer', { screen: 'SearchIn', params: { screen: 'Home' } });
+          : navigation.navigate('Drawer',
+            {
+              screen: 'SearchIn',
+              params: {
+                screen: 'HomeStack',
+                params: { screen: 'Home' }
+              }
+            });
       }
     }
     navigateToApp();

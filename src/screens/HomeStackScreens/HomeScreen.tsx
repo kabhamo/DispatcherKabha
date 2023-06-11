@@ -1,38 +1,52 @@
 import { FlashList } from "@shopify/flash-list";
+import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { DispatcherArticleCard } from '../components/HomeScreenComponents/DispatcherArticleCard';
-import { DispatcherBar } from '../components/HomeScreenComponents/DispatcherBar';
-import { DispatcherFilterBar } from '../components/HomeScreenComponents/DispatcherFilterBar';
-import { useAppDispatch } from "../hooks/reduxHooks";
-import { HomeScreenNavigationProp } from '../routes/types/navigationTypes';
-import { getArticles } from "../services/articlesAPI";
-import { getLocalData, storeLocalData } from '../services/asyncStorage';
-import { fetchFavoriteArticles, removeFavoriteArticles } from "../store/favoriteArticles/favoriteArticlesSlice";
-import { colors } from '../util/colors';
-import { AsyncLocalStorageKeysType } from '../util/enums';
-import { ArticleResponse, FavoriteArticle } from "../util/types";
+import { DispatcherArticleCard } from '../../components/HomeScreenComponents/DispatcherArticleCard';
+import { DispatcherBar } from '../../components/HomeScreenComponents/DispatcherBar';
+import { DispatcherFilterBar } from '../../components/HomeScreenComponents/DispatcherFilterBar';
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import type { HomeScreenNavigationProp } from '../../routes/types/navigationTypes';
+import { getArticles } from "../../services/articlesAPI";
+import { getLocalData, storeLocalData } from '../../services/asyncStorage';
+import { fetchFavoriteArticles, removeFavoriteArticles } from "../../store/favoriteArticles/favoriteArticlesSlice";
+import { colors } from '../../util/colors';
+import { AsyncLocalStorageKeysType } from '../../util/enums';
+import type { Article, FavoriteArticle } from "../../util/types";
 
 const { width, height } = Dimensions.get('screen')
 
 export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, route }: HomeScreenNavigationProp) => {
-  const [articles, setArticles] = useState<ArticleResponse[] | undefined>();
+  const [articles, setArticles] = useState<Article[] | undefined>();
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [dateTime, setDateTime] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.user)
 
-  //retrive the articles from asyncLocalStorage
+
+
+  //retrive the articles from device local storage
   useEffect(() => {
     async function getData() {
-      // Try fetching articles from API
-      const articles = await getArticles()
-      // If it works, then save to local storage
-      if (articles.length !== 0) {
-        //store the data in local storage
-        await storeLocalData(AsyncLocalStorageKeysType.ArticlesKey, articles)
+      try {
+        // Loading on
+        setLoading(true);
+        // Try fetching articles from API
+        const articles = await getArticles()
+        // If it works, then save to local storage
+        if (articles && articles.length !== 0) {
+          //store the data in local storage
+          await storeLocalData(AsyncLocalStorageKeysType.ArticlesKey, articles)
+        }
+      } catch (ex) {
+        console.log("error getArticles: ", ex);
+        setLoading(false);
+      } finally {
+        // FINALLY, return articles from local storage.
+        setArticles(await getLocalData(AsyncLocalStorageKeysType.ArticlesKey));
+        setLoading(false);
       }
-      // FINALLY, return articles from local storage.
-      setArticles(await getLocalData(AsyncLocalStorageKeysType.ArticlesKey))
     }
     getData();
   }, [])
@@ -43,7 +57,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
     return () => setOpenDrawer(false);
   }, [openDrawer]);
 
-  //fetch last login state from asyncStorage
+  //fetch last login state from device local storage
   useEffect(() => {
     const getDateTime = async () => {
       const result = await getLocalData(AsyncLocalStorageKeysType.UserAuthKey);
@@ -56,6 +70,11 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
   const onStarClick = async (favoriteArticle: FavoriteArticle, isFavoriteArticle: boolean) => {
     isFavoriteArticle ? await dispatch(removeFavoriteArticles(favoriteArticle.id)).unwrap() :
       await dispatch(fetchFavoriteArticles(favoriteArticle)).unwrap()
+  }
+
+  //navigate to the clicked article 
+  const onPressArticle = (artical: Article) => {
+    navigation.navigate('Artical', { article: artical })
   }
 
   return (
@@ -77,6 +96,8 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
       </View>
 
       <View style={styles.articleContainer}>
+        {loading &&
+          <Lottie source={require('../../assets/jsons/loadingActivity.json')} autoPlay loop />}
         {articles ?
           <FlashList
             data={articles}
@@ -86,6 +107,7 @@ export const HomeScreen: React.FC<HomeScreenNavigationProp> = ({ navigation, rou
                 data={item}
                 index={index}
                 onStarClick={onStarClick}
+                onPress={onPressArticle}
               />
             }
             estimatedItemSize={height}
